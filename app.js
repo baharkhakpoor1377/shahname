@@ -497,7 +497,7 @@ const DEFAULT_WRITER={
   name:'معصومه راستی',
   role:'شاهنامه‌پژوه و قصه‌گوی کودکان',
   bio:'فارغ‌التحصیل کارشناسی ارشد زبان و ادبیات فارسی با گرایش شاهنامه از دانشگاه کاشان و کارشناسی از دانشگاه شیراز است. او با تلفیق ادبیات کلاسیک و هنرهای تجسمی، روشی نوین و خلاقانه برای آموزش شاهنامه به کودکان (۳ تا ۶ سال) ابداع کرده است. با بهره‌گیری از نقاشی روی پارچه، ساخت عروسک‌ها و شخصیت‌های دست‌ساز اسطوره‌ای، و ترکیب آن با قصه‌گویی و شعرخوانی، فضایی جذاب برای آشنایی کودکان با فرهنگ و اسطوره‌های ایرانی فراهم می‌کند. سوابق وی شامل یک سال تدریس دانشگاهی و فعالیت آموزشی مستمر در مهدکودک‌ها با بیش از ۵۰ کودک است.',
-  mail:'hello@example.com',ig:'@talesaloud',tg:'t.me/talesaloud',web:'talesaloud.example.com',photo:null
+  mail:'hello@example.com',ig:'@talesaloud',tg:'t.me/dastanshaname',web:'shahname.app',photo:null
 };
 let STATE={};
 try{STATE=JSON.parse(document.getElementById('state').textContent)||{}}catch(e){STATE={}}
