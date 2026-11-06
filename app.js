@@ -509,6 +509,7 @@ if(!(window.claude&&typeof window.claude.use==='function')){
     if(x.status===200){const list=JSON.parse(x.responseText);
       if(Array.isArray(list)&&list.length){
         STATE.stories=list.map(e=>({id:e.id,title:e.title,sum:e.sum||'',text:e.text||'',cards:e.cards||[],art:e.art||'n13',cover:e.cover||null}));
+        try{const y=new XMLHttpRequest();y.open('GET','cardpics.json?'+Date.now(),false);y.send();if(y.status===200){const cp=JSON.parse(y.responseText);if(Array.isArray(cp))STATE.cardPics=cp}}catch(e){}
         list.forEach(e=>{if(e.audio)STATE.audio[e.id]={id:'file-'+e.id,file:e.audio,dur:0}});
         addEventListener('load',()=>{Object.keys(STATE.audio).forEach(k=>{const a=new Audio();a.preload='metadata';a.onloadedmetadata=()=>{if(isFinite(a.duration)){STATE.audio[k].dur=a.duration;try{renderPager()}catch(_){}}};a.src=STATE.audio[k].file.split('/').map(encodeURIComponent).join('/')})})
       }}
@@ -1465,7 +1466,13 @@ function contactLinks(w){
 }
 function renderTickets(){
   const C=[];
-  newestFirst().forEach(s=>(s.cards||[]).forEach(c=>{if(c&&c.q&&c.a)C.push({q:c.q,a:c.a,e:c.e||'',img:c.img&&COVERS[c.img]?COVERS[c.img]:(s.cover?'/_blob/'+s.cover:(COVERS[s.art]||''))})}));
+  const used=new Set();newestFirst().forEach(s=>(s.cards||[]).forEach(c=>{if(c&&c.img&&!COVERS[c.img])used.add(c.img)}));
+  const pool=(STATE.cardPics||[]).filter(u=>!used.has(u));
+  newestFirst().forEach(s=>(s.cards||[]).forEach((c,ci)=>{if(c&&c.q&&c.a){
+    let im=c.img?(COVERS[c.img]||(/^\/|^https?:|\.[a-z0-9]+$/i.test(c.img)?c.img:'')):'';
+    if(!im&&pool.length)im=pool[(Number(s.id)*3+ci)%pool.length];
+    if(!im)im=s.cover?(/\.[a-z0-9]+$/i.test(s.cover)?s.cover:'/_blob/'+s.cover):(COVERS[s.art]||'');
+    C.push({q:c.q,a:c.a,e:c.e||'',img:im&&!/^\/|^https?:|^data:/.test(im)?encodeURI(im):im})}}));
   const N=C.length;
   if(!N){$('#ticketsBody').innerHTML=`<div class="tkh"><h1>فلش‌کارت قصه‌ها</h1><p>هنوز فلش‌کارتی ساخته نشده است. با افزودن متن قصه، کارت‌ها خودکار ساخته می‌شوند.</p></div>`;return}
   $('#ticketsBody').innerHTML=`

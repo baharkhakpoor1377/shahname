@@ -1,7 +1,8 @@
 // Runs on Vercel at every deploy: finds the numbered story files and writes stories.json
 //   10.m4a (or .mp3)   = the voice          10.jpg (or .png) = cover picture (optional)
 //   10.txt             = title on line 1, then the story text
-//   10-cards.txt       = flashcards, one per line:  question | answer | short explanation (optional)
+//   10-cards.txt       = flashcards, one per line:  question | answer | explanation (optional) | picture file name (optional)
+//   card-1.jpg, card-2.jpg ... = spare card pictures, used automatically for cards that have no picture
 const fs = require('fs'), path = require('path');
 const AUDIO = ['.m4a', '.mp3', '.aac', '.wav', '.ogg'];
 const IMG = ['.jpg', '.jpeg', '.png', '.webp'];
@@ -33,10 +34,12 @@ for (const id of Object.keys(byId).map(Number).sort((a, b) => a - b)) {
   const cards = [];
   if (o.cards) for (const line of read(o.cards).split('\n')) {
     const p = line.split('|').map(x => x.trim());
-    if (p[0] && p[1]) cards.push({ q: p[0], a: p[1], e: p[2] || '' });
+    if (p[0] && p[1]) cards.push({ q: p[0], a: p[1], e: p[2] || '', img: p[3] && fs.existsSync(path.join(__dirname, p[3])) ? p[3] : '' });
   }
   if (!o.audio && !o.text) continue;
   out.push({ id, title, sum, text, cards, audio: o.audio || null, cover: o.cover || null });
 }
+const pics = fs.readdirSync(__dirname).filter(f => /^card-\d+\.(jpe?g|png|webp)$/i.test(f)).sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)));
+fs.writeFileSync(path.join(__dirname, 'cardpics.json'), JSON.stringify(pics));
 fs.writeFileSync(path.join(__dirname, 'stories.json'), JSON.stringify(out));
 console.log('stories.json written with ' + out.length + ' stories');
