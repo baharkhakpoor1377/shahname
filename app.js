@@ -508,7 +508,7 @@ if(!(window.claude&&typeof window.claude.use==='function')){
   try{const x=new XMLHttpRequest();x.open('GET','stories.json?'+Date.now(),false);x.send();
     if(x.status===200){const list=JSON.parse(x.responseText);
       if(Array.isArray(list)&&list.length){
-        STATE.stories=list.map(e=>({id:e.id,title:e.title,sum:e.sum||'',text:e.text||'',cards:e.cards||[],art:e.art||'n13',cover:e.cover||null,kind:e.kind||''}));
+        STATE.stories=list.map(e=>({id:e.id,title:e.title,sum:e.sum||'',text:e.text||'',cards:e.cards||[],art:e.art||'n13',cover:e.cover||null,kind:e.kind||'',at:e.at||0}));
         try{const y=new XMLHttpRequest();y.open('GET','cardpics.json?'+Date.now(),false);y.send();if(y.status===200){const cp=JSON.parse(y.responseText);if(Array.isArray(cp))STATE.cardPics=cp}}catch(e){}
         list.forEach(e=>{if(e.audio)STATE.audio[e.id]={id:'file-'+e.id,file:e.audio,dur:0}});
         addEventListener('load',()=>{Object.keys(STATE.audio).forEach(k=>{const a=new Audio();a.preload='metadata';a.onloadedmetadata=()=>{if(isFinite(a.duration)){STATE.audio[k].dur=a.duration;try{renderPager()}catch(_){}}};a.src=STATE.audio[k].file.split('/').map(encodeURIComponent).join('/')})})
@@ -777,7 +777,8 @@ let idx=0;
 const rtl=()=>getComputedStyle(pager).direction==='rtl'?-1:1;
 const newestFirst=()=>[...STORIES].sort((a,b)=>b.id-a.id);
 function renderPager(){
-  const ord=newestFirst(),top=ord.slice(0,1),rest=ord.slice(1);
+  const all=[...STORIES],hero=all.reduce((m,s)=>!m||(s.at||0)>(m.at||0)||((s.at||0)===(m.at||0)&&s.id>m.id)?s:m,null);
+  const top=hero?[hero]:[],rest=all.filter(s=>s!==hero).sort((a,b)=>a.id-b.id);
   pager.innerHTML=top.map(s=>`<article class="slide">
     <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
       <div class="ctt"><h2>${esc(s.title)}</h2><i class="gline"></i><div class="len">${lenText(s)}</div></div></a>
@@ -1167,7 +1168,7 @@ async function doStoryNew(){
   try{
     const next=clone(STATE);next.stories=storiesCopy();
     const id=Math.max(0,...next.stories.map(x=>x.id))+1;
-    next.stories.push({id,title:'قصه‌ی جدید',sum:'',cover:null});
+    next.stories.push({id,title:'قصه‌ی جدید',sum:'',cover:null,at:Date.now()});
     try{sessionStorage.setItem('ta_newstory',String(id))}catch(e){}
     await publishState(next);
   }catch(err){

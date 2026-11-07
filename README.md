@@ -12,3 +12,7 @@ The highest number appears as the cover story. Vercel rebuilds the site automati
 ## Flashcard pictures
 - Each line in N-cards.txt can end with a picture name: `question | answer | explanation | card-5.jpg`
 - Pictures named card-1.jpg, card-2.jpg ... are spare pictures. Cards without their own picture use them automatically.
+
+## Cover and order
+- The story you upload most recently becomes the cover automatically.
+- «همه قصه‌ها» lists the other stories by number: 1, 2, 3 ... from top to bottom.

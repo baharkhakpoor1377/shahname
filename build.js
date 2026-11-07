@@ -18,6 +18,9 @@ for (const f of fs.readdirSync(__dirname)) {
 }
 const read = f => fs.readFileSync(path.join(__dirname, f), 'utf8').replace(/^﻿/, '').replace(/\r\n?/g, '\n');
 const out = [];
+let prev = {};
+try { for (const s of JSON.parse(fs.readFileSync(path.join(__dirname, 'stories.json'), 'utf8'))) prev[s.id] = s.at || 0; } catch (e) {}
+let nextAt = Math.max(0, ...Object.values(prev)) + 1;
 for (const id of Object.keys(byId).map(Number).sort((a, b) => a - b)) {
   const o = byId[id];
   let title = 'قصه ' + id, sum = '', text = '', kind = '';
@@ -38,7 +41,7 @@ for (const id of Object.keys(byId).map(Number).sort((a, b) => a - b)) {
     if (p[0] && p[1]) cards.push({ q: p[0], a: p[1], e: p[2] || '', img: p[3] && fs.existsSync(path.join(__dirname, p[3])) ? p[3] : '' });
   }
   if (!o.audio && !o.text) continue;
-  out.push({ id, title, sum, text, cards, kind, audio: o.audio || null, cover: o.cover || null });
+  out.push({ id, at: prev[id] || nextAt++, title, sum, text, cards, kind, audio: o.audio || null, cover: o.cover || null });
 }
 const pics = fs.readdirSync(__dirname).filter(f => /^card-\d+\.(jpe?g|png|webp)$/i.test(f)).sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)));
 fs.writeFileSync(path.join(__dirname, 'cardpics.json'), JSON.stringify(pics));
