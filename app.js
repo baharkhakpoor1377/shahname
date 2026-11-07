@@ -508,7 +508,7 @@ if(!(window.claude&&typeof window.claude.use==='function')){
   try{const x=new XMLHttpRequest();x.open('GET','stories.json?'+Date.now(),false);x.send();
     if(x.status===200){const list=JSON.parse(x.responseText);
       if(Array.isArray(list)&&list.length){
-        STATE.stories=list.map(e=>({id:e.id,title:e.title,sum:e.sum||'',text:e.text||'',cards:e.cards||[],art:e.art||'n13',cover:e.cover||null}));
+        STATE.stories=list.map(e=>({id:e.id,title:e.title,sum:e.sum||'',text:e.text||'',cards:e.cards||[],art:e.art||'n13',cover:e.cover||null,kind:e.kind||''}));
         try{const y=new XMLHttpRequest();y.open('GET','cardpics.json?'+Date.now(),false);y.send();if(y.status===200){const cp=JSON.parse(y.responseText);if(Array.isArray(cp))STATE.cardPics=cp}}catch(e){}
         list.forEach(e=>{if(e.audio)STATE.audio[e.id]={id:'file-'+e.id,file:e.audio,dur:0}});
         addEventListener('load',()=>{Object.keys(STATE.audio).forEach(k=>{const a=new Audio();a.preload='metadata';a.onloadedmetadata=()=>{if(isFinite(a.duration)){STATE.audio[k].dur=a.duration;try{renderPager()}catch(_){}}};a.src=STATE.audio[k].file.split('/').map(encodeURIComponent).join('/')})})
@@ -527,7 +527,7 @@ const DEFAULT_STORIES=[
  {id:6,title:'رستم و اکوان دیو',min:16,ch:6,art:'c6',sum:'اکوان دیو چون کوهی از باد و غبار از دل زمین برخاست و رستم را در دشت فرو برد. نبردی میان نیروی خام و خرد پهلوان.'}
 ];
 let STORIES=(Array.isArray(STATE.stories)&&STATE.stories.length)?STATE.stories:DEFAULT_STORIES.map(({id,title,art,sum})=>({id,title,art,sum}));
-const lenText=s=>{const a=STATE.audio&&STATE.audio[s.id];return a&&a.dur?fa(Math.max(1,Math.round(a.dur/60)))+' دقیقه':''};
+const lenText=s=>{const a=STATE.audio&&STATE.audio[s.id];const t=a&&a.dur?fa(Math.max(1,Math.round(a.dur/60)))+' دقیقه':'';return (s.kind==='short'?'قصه کوتاه'+(t?' · ':''):'')+t};
 function coverHTML(s){
   if(s.cover)return `<img alt="" src="${/\.[a-z0-9]+$/i.test(s.cover)?s.cover.split('/').map(encodeURIComponent).join('/'):'/_blob/'+s.cover}" draggable="false">`;
   return art(s.art&&COVERS[s.art]?s.art:'moon');

@@ -20,11 +20,12 @@ const read = f => fs.readFileSync(path.join(__dirname, f), 'utf8').replace(/^﻿
 const out = [];
 for (const id of Object.keys(byId).map(Number).sort((a, b) => a - b)) {
   const o = byId[id];
-  let title = 'قصه ' + id, sum = '', text = '';
+  let title = 'قصه ' + id, sum = '', text = '', kind = '';
   if (o.text) {
     const lines = read(o.text).split('\n');
     title = (lines.shift() || title).trim();
     if (lines.length && /^(خلاصه|Summary)\s*[:：]/i.test(lines[0].trim())) sum = lines.shift().replace(/^[^:：]*[:：]/, '').trim();
+    if (lines.length && /^(نوع|Type)\s*[:：]/i.test(lines[0].trim())) kind = /کوتاه|short/i.test(lines.shift()) ? 'short' : '';
     text = lines.join('\n').trim();
     if (!sum) {
       const flat = text.replace(/\s+/g, ' ');
@@ -37,7 +38,7 @@ for (const id of Object.keys(byId).map(Number).sort((a, b) => a - b)) {
     if (p[0] && p[1]) cards.push({ q: p[0], a: p[1], e: p[2] || '', img: p[3] && fs.existsSync(path.join(__dirname, p[3])) ? p[3] : '' });
   }
   if (!o.audio && !o.text) continue;
-  out.push({ id, title, sum, text, cards, audio: o.audio || null, cover: o.cover || null });
+  out.push({ id, title, sum, text, cards, kind, audio: o.audio || null, cover: o.cover || null });
 }
 const pics = fs.readdirSync(__dirname).filter(f => /^card-\d+\.(jpe?g|png|webp)$/i.test(f)).sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)));
 fs.writeFileSync(path.join(__dirname, 'cardpics.json'), JSON.stringify(pics));
