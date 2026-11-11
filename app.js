@@ -411,6 +411,15 @@ body{overflow-x:clip}
 #ent::before{display:none;content:"";position:absolute;left:50%;top:34%;width:90vw;height:90vw;max-width:520px;max-height:520px;transform:translate(-50%,-50%);z-index:1;border-radius:50%;background:radial-gradient(circle,rgba(120,150,255,.18),rgba(120,150,255,0) 66%);pointer-events:none;animation:entglow 5s ease-in-out infinite alternate}
 @keyframes entglow{from{opacity:.55;transform:translate(-50%,-50%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
 #ent::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,#050a1c 3%,rgba(5,10,28,.85) 22%,rgba(5,10,28,.2) 42%,rgba(5,10,28,0) 60%);pointer-events:none}
+
+/* desktop entrance: full-height HD video, whole figure visible, blurred sides */
+#ent .bg .blur{display:none}
+@media (min-width:900px) and (min-aspect-ratio:1/1){
+  #ent .bg .blur{display:block;position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;filter:blur(46px) brightness(.55) saturate(1.2)}
+  #ent .bg img:not(.blur),#ent .bg video{object-fit:contain;object-position:50% 50%;left:50%;right:auto;width:auto;max-width:100%;aspect-ratio:464/832;transform:translateX(-50%)}
+  #ent .bg video{height:100%}
+  #ent::after{background:linear-gradient(to top,#050a1c 2%,rgba(5,10,28,.75) 16%,rgba(5,10,28,0) 40%),linear-gradient(to right,rgba(5,10,28,.55),transparent 28%,transparent 72%,rgba(5,10,28,.55))}
+}
 #ent .in{position:relative;z-index:2;max-width:380px;width:100%;margin:0 auto;text-align:center}
 #ent .ent-acts{display:flex;flex-direction:column;align-items:center;gap:10px}
 #ent .ent-note{color:#9fb0d8;font-size:11.5px;margin:14px 0 0}
@@ -880,12 +889,13 @@ function applyWriter(){
   const url=(w.photo?(/^data:/.test(w.photo)?w.photo:'/_blob/'+w.photo):null);
   const ab=$('#abPhoto'),eb=$('#entBg');
   ab.innerHTML=url?`<img alt="" src="${url}">`:avatarPH;
-  eb.innerHTML=`<img alt="" src="${ENT_IMG}"><video muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" style="opacity:0;transition:opacity .8s"></video>`;
+  eb.innerHTML=`<img class="blur" alt="" src="${ENT_IMG}"><img alt="" src="${ENT_IMG}"><video muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" style="opacity:0;transition:opacity .8s"></video>`;
   {const v=$('video',eb);if(v&&$('#ent').hidden)v.remove();else if(v){
     v.muted=true;v.setAttribute('muted','');
     v.addEventListener('playing',()=>{v.style.opacity=1;const sk=$('#entSky');if(sk)sk.style.display='none'},{once:true});
-    v.addEventListener('error',()=>{v.remove()});
-    v.src='entrance.mp4';const p=v.play();if(p&&p.catch)p.catch(()=>{});
+    const HD=matchMedia('(min-width:900px) and (min-aspect-ratio:1/1)').matches;
+    v.addEventListener('error',()=>{if(HD&&!v.dataset.fb){v.dataset.fb=1;v.src='entrance.mp4';v.play().catch(()=>{})}else v.remove()});
+    v.src=HD?'entrance-hd.mp4':'entrance.mp4';const p=v.play();if(p&&p.catch)p.catch(()=>{});
     const kick=()=>{if(v.paused)v.play().catch(()=>{})};
     document.addEventListener('touchstart',kick,{once:true,passive:true});document.addEventListener('click',kick,{once:true});
   }}
