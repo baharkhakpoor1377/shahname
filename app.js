@@ -922,7 +922,7 @@ function renderPager(){
   pager.innerHTML=top.map(s=>`<article class="slide">
     <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
       <div class="ctt"><div class="hnow">قصه‌ی امشب</div><h2>${esc(s.title)}</h2><i class="gline"></i><div class="hrow"><span class="hplay ring gold"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="#1a1203"/></svg></span><div class="len">${lenText(s)}</div></div></div></a>
-    <div class="hmeta"><div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></div></article>`).join('');
+    <div class="hmeta"><div class="lbl">${label(s.id)}</div></div></article>`).join('');
   $('#grid').innerHTML=rest.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<i class="cgrad"></i><span class="num">${fa(s.id)}</span>${(t=>t?`<span class="chip">${t}</span>`:'')(lenText(s).replace('قصه کوتاه','').replace('·','').trim())}<div class="gt">${esc(s.title)}</div></div>
     <div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></a>`).join('');
   idx=0;const sec=$('#grid').previousElementSibling;if(sec&&sec.classList.contains('sec'))sec.hidden=!rest.length;
