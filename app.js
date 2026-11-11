@@ -352,7 +352,7 @@ body{overflow-x:clip}
 .sv-cover .ctt h1{font-family:'Noto Nastaliq Urdu','Vazirmatn',serif;font-size:clamp(28px,8vw,36px);font-weight:700;line-height:2;margin:0;background:linear-gradient(180deg,#fff2c4,#e8c46e 55%,#b8801f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 .sv-cover .ctt .gline{display:none}
 .sv-sub{font-size:12.5px;color:#9fb0de;margin-top:-4px}
-#story .player{display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center;direction:ltr;margin:6px var(--gut) 14px;width:auto}
+#story .player{display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center;direction:ltr;margin:6px max(26px,var(--gut)) 14px;width:auto}
 #story .seek{grid-column:2;grid-row:1;padding:2px 0}
 #story #wvc{width:100%}
 #story .times{grid-column:2;grid-row:2}
@@ -360,10 +360,10 @@ body{overflow-x:clip}
 #story .play{grid-column:1;grid-row:1/3;width:62px;height:62px;background:rgba(14,22,58,.62);color:#e6edff;box-shadow:none;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 #story #svRew{grid-column:2;grid-row:3;justify-self:start;margin-top:10px;width:34px;height:34px}
 #story #svFwd{grid-column:2;grid-row:3;justify-self:end;margin-top:10px;width:34px;height:34px}
-#story .sumcard{margin:6px var(--gut) 18px;background:none;border:0;box-shadow:none;padding:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+#story .sumcard{margin:6px max(26px,var(--gut)) 18px;background:none;border:0;box-shadow:none;padding:0;-webkit-backdrop-filter:none;backdrop-filter:none}
 #story .sumcard h4{display:none}
 #story .sumcard p{font-size:15px;line-height:2.2;color:#d8e0f6;font-weight:300}
-#story .sv-add{margin:0 var(--gut) 12px}
+#story .sv-add{margin:0 max(26px,var(--gut)) 12px}
 .sumcard{padding:20px;margin-bottom:18px}
 .sumcard h4{font-size:12px;color:var(--gold);font-weight:500;margin-bottom:6px}
 .sumcard p{font-size:14.5px;line-height:2;color:var(--soft)}
