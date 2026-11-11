@@ -407,7 +407,6 @@ const SHELL=`
         <div class="crow" id="c-tg"><span class="ci" data-ic="tg"></span><span class="cv"></span></div>
         <div class="crow" id="c-web"><span class="ci" data-ic="globe"></span><span class="cv"></span></div>
       </div>
-      <a class="alink gold" id="alink" href="#studio" hidden>پیشخوان من: صدا، عکس و متن</a>
     </div>
   </div></section>
 
@@ -1095,7 +1094,6 @@ $('#mePhotoIn').addEventListener('change',async e=>{
 let CU=null,CA=null,CAs=null,canEdit=false,capsReady=false,busy=false;
 let cur=null,loaded=null,loadingAud=false,lastSave=-5,lastTab='stories';
 function refreshAuthUI(){
-  $('#alink').hidden=!canEdit;
   $('#svAdd').hidden=!(canEdit&&cur!=null&&!hasAudio(cur));
   if(lastTab==='studio')renderStudio();
 }
