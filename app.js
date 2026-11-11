@@ -113,6 +113,43 @@ html,body{overscroll-behavior-x:none}
 .gi .len{font-size:12px}
 .gi .lbl{font-size:11px}
 
+/* home — cinematic showcase (approved mock-up) */
+#tab-stories{padding-top:0}
+body{overflow-x:clip}
+#tab-stories .wrap{position:relative}
+#tab-stories .top{position:absolute;z-index:6;top:calc(var(--st) + 20px);inset-inline:0;margin:0}
+#tab-stories .hello,#tab-stories .sub{text-shadow:0 2px 12px rgba(0,0,0,.7)}
+#tab-stories .sub{color:#c3cdea}
+#pager{width:100vw;margin-inline:calc(50% - 50vw)}
+#pager .slide{padding-inline:0}
+#pager .cover.hero{height:min(78svh,820px);min-height:430px;border-radius:0;max-height:none}
+#pager .cover.hero::after,#pager .cover.hero.ring::before{display:none}
+#pager .hero .num{display:none}
+#pager .hero .cgrad{background:linear-gradient(to top,#050a1f 4%,rgba(5,10,31,.55) 34%,rgba(5,10,31,.1) 62%,rgba(5,10,31,.45))}
+#pager .hero .ctt{inset-inline:max(22px,var(--gut));bottom:22px}
+#pager .hero .ctt h2{font-family:'Noto Nastaliq Urdu','Vazirmatn',serif;font-size:clamp(28px,8.2vw,36px);font-weight:700;line-height:1.95;background:linear-gradient(180deg,#fff2c4,#e8c46e 55%,#b8801f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#pager .hero .ctt .gline{display:none}
+.hnow{font-size:12px;color:#cdbfff;margin-bottom:-2px}
+.hrow{display:flex;align-items:center;gap:12px;margin-top:6px}
+.hplay{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;flex:none;background:rgba(14,22,58,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.hplay svg{width:22px;height:22px;fill:#e6edff}
+.hplay svg path{fill:#e6edff}
+#pager .hero .len{font-size:12.5px;color:#cfd8f3}
+#pager .hmeta{padding:2px max(22px,var(--gut)) 0}
+#tab-stories .sec{margin:22px 0 14px;font-size:17px;font-weight:800}
+#grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none;width:100vw;margin-inline:calc(50% - 50vw);padding:4px max(16px,var(--gut)) 8px;box-sizing:border-box}
+#grid::-webkit-scrollbar{display:none}
+#grid .gi{flex:none;width:min(44vw,196px);scroll-snap-align:start}
+#grid .gi .cover{aspect-ratio:2/3;border-radius:18px;box-shadow:0 14px 30px rgba(0,0,0,.55)}
+#grid .gi .cover::after{display:none}
+#grid .gi .cover.ring::before{display:none}
+#grid .gi .cgrad{background:linear-gradient(to top,rgba(5,10,31,.96),rgba(5,10,31,0) 58%)}
+#grid .gi .gt{position:absolute;z-index:4;inset-inline:12px;bottom:11px;font-size:14px;font-weight:700;line-height:1.7;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.8)}
+#grid .gi .chip{position:absolute;z-index:4;top:10px;inset-inline-end:10px;font-size:10.5px;padding:3px 9px;border-radius:99px;background:rgba(5,10,28,.62);color:#e6edff}
+#grid .gi .num{display:none}
+#grid .gi .bar{margin:9px 2px 5px}
+#grid .gi .lbl{padding-inline:2px}
+
 .head h1{font-size:26px;font-weight:800;line-height:1.3}
 .head p{font-size:13px;color:var(--mute);margin:4px 0 22px}
 .rows{display:flex;flex-direction:column;gap:12px}
@@ -298,6 +335,32 @@ html,body{overscroll-behavior-x:none}
 .sv-act .round.fav{color:var(--gold)}
 .sv-info{text-align:center;color:var(--mute);font-size:13px;margin:16px 0 14px}
 .sv-add{display:block;text-align:center;font-size:12.5px;color:var(--gold);margin:-6px 0 12px}
+
+/* story page — cinematic (approved mock-up) */
+#story.open{background:linear-gradient(180deg,#071030,#050a1f 60%)}
+.svw{padding:0 0 calc(120px + var(--sb));max-width:560px;margin:0 auto}
+.sv-back{display:none}
+.sv-cover{height:72svh;min-height:400px;max-height:780px;border-radius:0;background:none;box-shadow:none;margin:0}
+.sv-cover.ring::before,.sv-cover::after{display:none}
+.sv-cover .cgrad{background:linear-gradient(to top,#050a1f 3%,rgba(5,10,31,.72) 26%,rgba(5,10,31,0) 58%)}
+.sv-close{top:calc(var(--st) + 14px)}
+.sv-fav{top:calc(var(--st) + 14px)}
+.sv-cover .ctt{bottom:14px;inset-inline:22px;text-align:center}
+.sv-cover .ctt h1{font-family:'Noto Nastaliq Urdu','Vazirmatn',serif;font-size:clamp(28px,8vw,36px);font-weight:700;line-height:2;margin:0;background:linear-gradient(180deg,#fff2c4,#e8c46e 55%,#b8801f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.sv-cover .ctt .gline{display:none}
+.sv-sub{font-size:12.5px;color:#9fb0de;margin-top:-4px}
+#story .player{display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center;direction:ltr;margin:6px var(--gut) 14px;width:auto}
+#story .seek{grid-column:2;grid-row:1;padding:2px 0}
+#story #wvc{width:100%}
+#story .times{grid-column:2;grid-row:2}
+#story .ctrls{display:contents}
+#story .play{grid-column:1;grid-row:1/3;width:62px;height:62px;background:rgba(14,22,58,.62);color:#e6edff;box-shadow:none;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+#story #svRew{grid-column:2;grid-row:3;justify-self:start;margin-top:10px;width:34px;height:34px}
+#story #svFwd{grid-column:2;grid-row:3;justify-self:end;margin-top:10px;width:34px;height:34px}
+#story .sumcard{margin:6px var(--gut) 18px;background:none;border:0;box-shadow:none;padding:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+#story .sumcard h4{display:none}
+#story .sumcard p{font-size:15px;line-height:2.2;color:#d8e0f6;font-weight:300}
+#story .sv-add{margin:0 var(--gut) 12px}
 .sumcard{padding:20px;margin-bottom:18px}
 .sumcard h4{font-size:12px;color:var(--gold);font-weight:500;margin-bottom:6px}
 .sumcard p{font-size:14.5px;line-height:2;color:var(--soft)}
@@ -444,7 +507,7 @@ const SHELL=`
       <i class="cgrad"></i>
       <button class="round sv-close" id="svClose" aria-label="بستن"></button>
       <button class="round sv-fav" id="svFav" aria-label="مورد علاقه"></button>
-      <div class="ctt"><h1 id="svTitle"></h1><i class="gline"></i></div>
+      <div class="ctt"><h1 id="svTitle"></h1><i class="gline"></i><div class="sv-sub" id="svInfo"></div></div>
     </div>
     <div class="player" id="player">
       <div class="seek" id="seek"><canvas id="wvc"></canvas></div>
@@ -455,7 +518,6 @@ const SHELL=`
         <button class="rbtn" id="svFwd" aria-label="۱۵ ثانیه جلو"></button>
       </div>
     </div>
-    <div class="sv-info" id="svInfo"></div>
     <a class="sv-add" id="svAdd" href="#studio" hidden>افزودن صدای این قصه</a>
     <div class="sumcard glass" id="svTextCard" hidden><h4>متن قصه</h4><p id="svText" style="white-space:pre-line"></p></div>
   </div>
@@ -857,10 +919,9 @@ function renderPager(){
   const top=hero?[hero]:[],rest=all.filter(s=>s!==hero).sort((a,b)=>a.id-b.id);
   pager.innerHTML=top.map(s=>`<article class="slide">
     <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
-      <div class="ctt"><h2>${esc(s.title)}</h2><i class="gline"></i><div class="len">${lenText(s)}</div></div></a>
+      <div class="ctt"><div class="hnow">قصه‌ی امشب</div><h2>${esc(s.title)}</h2><i class="gline"></i><div class="hrow"><span class="hplay ring gold"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="#1a1203"/></svg></span><div class="len">${lenText(s)}</div></div></div></a>
     <div class="hmeta"><div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></div></article>`).join('');
-  $('#grid').innerHTML=rest.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<span class="num">${fa(s.id)}</span></div>
-    <h4>${esc(s.title)}</h4><div class="len">${lenText(s)}</div>
+  $('#grid').innerHTML=rest.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<i class="cgrad"></i><span class="num">${fa(s.id)}</span>${(t=>t?`<span class="chip">${t}</span>`:'')(lenText(s).replace('قصه کوتاه','').replace('·','').trim())}<div class="gt">${esc(s.title)}</div></div>
     <div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></a>`).join('');
   idx=0;const sec=$('#grid').previousElementSibling;if(sec&&sec.classList.contains('sec'))sec.hidden=!rest.length;
   pager.scrollTo({left:0,behavior:'instant'});
@@ -1464,7 +1525,7 @@ function openStory(id){
   $('#svArt').innerHTML=coverHTML(s);
   $('#svTitle').textContent=s.title;
   buildWave(s.id);
-  $('#svInfo').textContent=lenText(s);
+  $('#svInfo').textContent='با صدای '+((STATE.writer&&STATE.writer.name)||'معصومه راستی')+' · '+lenText(s);
   $('#svText').textContent=s.text||'';$('#svTextCard').hidden=!(s.text&&s.text.trim());
   $('#story').classList.add('open');$('#story').scrollTop=0;document.body.classList.add('svo');
   svUI();
