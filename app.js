@@ -50,12 +50,12 @@ svg{display:block}
 
 .ring{position:relative}
 .ring::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;z-index:3;
-  background:conic-gradient(from var(--a),rgba(160,185,255,.08) 0,rgba(160,185,255,.12) 45%,rgba(190,210,255,.7) 80%,rgba(160,185,255,.08) 100%);
+  background:conic-gradient(from var(--a),rgba(90,168,255,0) 0%,rgba(90,168,255,0) 48%,#4f9dff 64%,#a98bff 78%,#ff9f5a 90%,rgba(255,159,90,0) 100%);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;
   animation:spin 7s linear infinite}
 .ring.gold::before{padding:1.5px;
-  background:conic-gradient(from var(--a),rgba(216,154,20,.14) 0,rgba(216,154,20,.22) 38%,#d89a14 60%,#f7cd4c 78%,#fff0b3 90%,#f7cd4c 96%,rgba(216,154,20,.14) 100%);
+  background:conic-gradient(from var(--a),rgba(90,168,255,0) 0%,rgba(90,168,255,0) 48%,#4f9dff 64%,#a98bff 78%,#ff9f5a 90%,rgba(255,159,90,0) 100%);
   animation-duration:4.5s}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;transition:transform .15s,opacity .2s}
@@ -208,8 +208,8 @@ html,body{overscroll-behavior-x:none}
 
 #nav{position:fixed;z-index:60;bottom:calc(var(--sb) + 14px);left:50%;transform:translateX(-50%);width:min(400px,calc(100% - 2*var(--gut)));height:64px;border-radius:999px;display:flex;background:rgba(9,17,44,.74);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:transform .35s,opacity .35s}
 #nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--mute);font-size:10.5px;transition:color .2s;position:relative;z-index:4}
-#nav a.on{color:var(--gold)}
-#nav.ring::before{padding:1.5px;background:conic-gradient(from var(--a),rgba(216,154,20,.14) 0,rgba(216,154,20,.22) 38%,#d89a14 60%,#f7cd4c 78%,#fff0b3 90%,#f7cd4c 96%,rgba(216,154,20,.14) 100%);animation-duration:4.5s}
+#nav a.on{color:#e6edff}
+#nav.ring::before{animation-duration:7s}
 #nav a{-webkit-tap-highlight-color:transparent}
 
 .tkh{text-align:center;padding:8px 4px 22px}
