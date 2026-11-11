@@ -139,7 +139,8 @@ body{overflow-x:clip}
 #pager .hero .len{font-size:12.5px;color:#cfd8f3}
 #pager .hmeta{padding:2px max(22px,var(--gut)) 0}
 #tab-stories .sec{margin:22px 0 14px;font-size:17px;font-weight:800}
-#grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none;width:100vw;margin-inline:calc(50% - 50vw);padding:4px max(16px,var(--gut)) 8px;box-sizing:border-box}
+#grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:24px;scrollbar-width:none;width:100vw;margin-inline:calc(50% - 50vw);padding:4px max(24px,var(--gut)) 8px;box-sizing:border-box}
+#tab-stories .sec{padding-inline:8px}
 #grid::-webkit-scrollbar{display:none}
 #grid .gi{flex:none;width:min(44vw,196px);scroll-snap-align:start}
 #grid .gi .cover{aspect-ratio:2/3;border-radius:18px;box-shadow:0 14px 30px rgba(0,0,0,.55)}
