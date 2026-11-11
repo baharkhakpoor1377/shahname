@@ -274,8 +274,8 @@ html,body{overscroll-behavior-x:none}
 #story.open{display:block;animation:fade .4s ease}
 .svw{padding:calc(var(--st) + 10px) var(--gut) calc(120px + var(--sb));max-width:560px;margin:0 auto}
 .sv-cover{width:100%;aspect-ratio:auto;height:calc(80svh - var(--st) - 30px);min-height:360px;max-height:900px;margin:0 auto}
-.sv-cover .ctt{bottom:170px}
-#story .player{position:sticky;bottom:calc(var(--sb) + 90px);z-index:20;width:100%;margin:14px auto 8px;padding:10px 16px 12px;border-radius:26px;background:rgba(8,14,36,.82);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 10px 30px rgba(0,0,0,.35)}
+.sv-cover .ctt{bottom:34px}
+#story .player{position:static;width:100%;margin:18px auto 8px;padding:0;background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
 .sv-back{font-size:14px;padding:8px 2px;color:var(--ink)}
 .sv-fav{position:absolute;z-index:5;top:14px;inset-inline-start:14px;width:42px;height:42px;color:var(--gold);background:rgba(8,14,36,.55);backdrop-filter:blur(6px)}
 .sv-fav.on{color:#ff7a9c}
