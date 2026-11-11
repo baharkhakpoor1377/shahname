@@ -125,8 +125,10 @@ body{overflow-x:clip}
 #pager .cover.hero{height:min(78svh,820px);min-height:430px;border-radius:0;max-height:none}
 #pager .cover.hero::after,#pager .cover.hero.ring::before{display:none}
 #pager .hero .num{display:none}
-#pager .hero .cgrad{background:linear-gradient(to top,#050a1f 4%,rgba(5,10,31,.55) 34%,rgba(5,10,31,.1) 62%,rgba(5,10,31,.45))}
-#pager .hero .ctt{inset-inline:max(22px,var(--gut));bottom:22px}
+#pager .cover.hero{background:none;overflow:visible;border-radius:0}
+#pager .hero>img,#pager .hero>svg{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 52%,rgba(0,0,0,.55) 74%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0,#000 52%,rgba(0,0,0,.55) 74%,transparent 100%)}
+#pager .hero .cgrad{background:linear-gradient(to bottom,rgba(5,10,31,.5),rgba(5,10,31,0) 18%,rgba(5,10,31,0) 50%,rgba(5,10,31,.42) 76%,rgba(5,10,31,0) 100%)}
+#pager .hero .ctt{inset-inline:max(22px,var(--gut));bottom:34px}
 #pager .hero .ctt h2{font-family:'Noto Nastaliq Urdu','Vazirmatn',serif;font-size:clamp(28px,8.2vw,36px);font-weight:700;line-height:1.95;background:linear-gradient(180deg,#fff2c4,#e8c46e 55%,#b8801f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 #pager .hero .ctt .gline{display:none}
 .hnow{font-size:12px;color:#cdbfff;margin-bottom:-2px}
