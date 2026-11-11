@@ -1629,20 +1629,33 @@ function ticketData(){
     let im=c.img?(COVERS[c.img]||(/^\/|^https?:|\.[a-z0-9]+$/i.test(c.img)?c.img:'')):'';
     if(!im&&pool.length)im=pool[(Number(s.id)*3+ci)%pool.length];
     if(!im)im=s.cover?(/\.[a-z0-9]+$/i.test(s.cover)?s.cover:'/_blob/'+s.cover):(COVERS[s.art]||'');
-    C.push({q:c.q,a:c.a,e:c.e||'',img:im&&!/^\/|^https?:|^data:/.test(im)?encodeURI(im):im})}}));
+    C.push({_s:s.id,q:c.q,a:c.a,e:c.e||'',img:im&&!/^\/|^https?:|^data:/.test(im)?encodeURI(im):im})}}));
   return C;
 }
+const TK_N=7; /* the deck always holds 7 cards, mixed across the stories; every visit brings the next 7 */
+let TK_NEXT=null;
+function tkDeck(){
+  const all=ticketData();if(all.length<=TK_N)return all;
+  /* round-robin over stories (newest first) so a deck mixes different stories */
+  const groups=[];let g=null,key=null;
+  newestFirst().forEach(s=>{const cs=all.filter(c=>c._s===s.id);if(cs.length)groups.push(cs)});
+  const mix=[];for(let r=0;mix.length<all.length;r++){let any=false;groups.forEach(gr=>{if(gr[r]){mix.push(gr[r]);any=true}});if(!any)break}
+  let off=+store.get('ta_tkoff',0)||0;if(off>=mix.length||off<0)off=0;
+  const deck=[];for(let i=0;i<TK_N;i++)deck.push(mix[(off+i)%mix.length]);
+  return deck;
+}
+function tkAdvance(){try{const n=ticketData().length;store.set('ta_tkoff',((+store.get('ta_tkoff',0)||0)+TK_N)%Math.max(1,n))}catch(e){}}
 function warmTickets(){
-  try{const pics=[...new Set(ticketData().map(c=>c.img).filter(Boolean))];window.__tkWarm=pics.map(u=>{const i=new Image();i.decoding='async';i.src=u;return i.decode?i.decode().catch(()=>{}):0})}catch(e){}
+  try{TK_NEXT=tkDeck();const pics=[...new Set(TK_NEXT.slice(0,4).map(c=>c.img).filter(Boolean))];window.__tkWarm=pics.map(u=>{const i=new Image();i.decoding='async';i.src=u;return i.decode?i.decode().catch(()=>{}):0})}catch(e){}
 }
 function renderTickets(){
-  const C=ticketData();
+  const C=TK_NEXT||tkDeck();TK_NEXT=null;tkAdvance();
   const N=C.length;
   if(!N){$('#ticketsBody').innerHTML=`<div class="tkh"><h1>فلش‌کارت قصه‌ها</h1><p>هنوز فلش‌کارتی ساخته نشده است. با افزودن متن قصه، کارت‌ها خودکار ساخته می‌شوند.</p></div>`;return}
   $('#ticketsBody').innerHTML=`
     <div class="tkh"><h1>فلش‌کارت قصه‌ها</h1><p>چقدر قصه‌ها را به یاد دارید؟ روی کارت بزنید تا جواب را ببینید.</p></div>
     <div class="tkstack" id="tkStack">${C.map((c,i)=>{const L=(c.a||'').length,fs=L<=8?40:L<=16?30:L<=30?22:17;return `<div class="tk fc" data-i="${i}"><div class="fc-in">
-      <div class="fc-f"><div class="fc-open"><div class="fc-ph">${c.img?`<img alt="" src="${c.img}" draggable="false" decoding="async">`:''}</div>
+      <div class="fc-f"><div class="fc-open"><div class="fc-ph">${c.img?`<img alt="" data-s="${c.img}" draggable="false" decoding="async">`:''}</div>
         <div class="fc-q"><svg class="fc-orn" viewBox="0 0 150 14" aria-hidden="true"><path d="M0 7h56M94 7h56" stroke="#c9963a" stroke-width="1.4"/><path d="M75 0l7 7-7 7-7-7z" fill="#e8c46e"/></svg><h3>${esc(c.q)}</h3></div></div></div>
       <div class="fc-b"><div class="fc-open"><div class="fc-bi"><span class="lb">پاسخ</span><h3 style="font-size:${fs}px">${esc(c.a)}</h3><svg class="fc-orn" viewBox="0 0 150 14" aria-hidden="true"><path d="M0 7h56M94 7h56" stroke="#c9963a" stroke-width="1.4"/><path d="M75 0l7 7-7 7-7-7z" fill="#e8c46e"/></svg><p>${esc(c.e)}</p></div></div></div>
     </div><div class="fc-cap">کارت ${fa(i+1)} از ${fa(N)} · برای دیدن جواب بزنید</div></div>`}).join('')}</div>
@@ -1660,7 +1673,13 @@ function initTickets(){
       c.style.filter=k===0?'none':'brightness('+(k===1?.78:.6)+')';
     });
   }
-  layout(false);
+  function sync(){ /* keep only the top 4 cards in the DOM tree/memory: the rest are hidden and their photos released */
+    cards.forEach((c,i)=>{const k=order.indexOf(i),vis=k<=3,im=$('.fc-ph img',c);
+      c.style.display=vis?'':'none';
+      if(im){if(vis){if(!im.getAttribute('src')&&im.dataset.s)im.src=im.dataset.s}else if(im.getAttribute('src'))im.removeAttribute('src')}
+    });
+  }
+  layout(false);sync();
   let top=null,sx=0,sy=0,dx=0,dy=0,t0=0,moved=false,id=null;
   st.addEventListener('pointerdown',e=>{
     const c=e.target.closest('.tk');if(!c||+c.dataset.i!==order[0])return;
@@ -1690,7 +1709,7 @@ function initTickets(){
       setTimeout(()=>{c.classList.remove('flip');order.push(order.shift());c.style.transition='none';layout(false);void c.offsetWidth;
         cards.forEach((cc,i)=>{if(cc!==c){cc.style.transition='transform .45s cubic-bezier(.2,.8,.2,1)';cc.style.transform=pose(order.indexOf(i))}});
         c.style.transition='none';c.style.transform=pose(2);c.style.opacity=0;void c.offsetWidth;c.style.transition='opacity .35s';c.style.opacity=1;
-        layoutFilters();},380);
+        layoutFilters();sync();},380);
     }else layout(true);
   }
   function layoutFilters(){cards.forEach((c,i)=>{const k=order.indexOf(i);c.style.transition+=',filter .4s';c.style.filter=k===0?'none':'brightness('+(k===1?.78:.6)+')';c.style.zIndex=10-k;c.style.pointerEvents=k===0?'auto':'none'})}
@@ -1710,7 +1729,7 @@ function showTab(t){
   if(t==='stories'){greet();renderPager()}
   if(t==='fav')renderFav();
   if(t==='me')renderMe();
-  if(t==='tickets'){renderTickets();initTickets()}
+  if(t==='tickets'){renderTickets();initTickets();setTimeout(warmTickets,1500)}
   if(t==='studio')renderStudio();
   scrollTo(0,0);
 }
