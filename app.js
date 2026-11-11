@@ -77,7 +77,8 @@ body.svo #app{visibility:hidden}
 .avatar .ph{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#0a1330;display:grid;place-items:center}
 .avatar img,.avatar .ph svg{width:100%;height:100%;object-fit:cover}
 .hello{display:flex;align-items:center;gap:8px;font-weight:600;font-size:18px;line-height:1.3}
-.hello svg{color:var(--gold);flex:none}
+.hello svg{flex:none;display:block;filter:drop-shadow(0 0 6px rgba(255,214,120,.35))}
+#gIcon{display:inline-flex}
 .sub{font-size:13px;color:var(--mute);margin-top:2px}
 
 .cover{aspect-ratio:3/4;border-radius:6px;overflow:hidden;position:relative;background:#0a1330;display:block}
@@ -373,7 +374,7 @@ const SHELL=`
     <div class="top">
       <a href="#me" class="avatar ring gold" aria-label="حساب من"><span class="ph" id="meAv"></span></a>
       <div>
-        <div class="hello"><span id="gIcon"></span><span id="gText"></span></div>
+        <div class="hello"><span id="gText"></span><span id="gIcon"></span></div>
         <div class="sub">کدام قصه را می‌شنوید؟</div>
       </div>
     </div>
@@ -708,7 +709,7 @@ function label(id){
 }
 const fmt=t=>{t=Math.max(0,t||0);return fa(String(Math.floor(t/60)).padStart(2,'0'))+':'+fa(String(Math.floor(t%60)).padStart(2,'0'))};
 function meAvatarHTML(){
-  if(!acct)return avatarPH;
+  if(!acct)return avatarSVG('h2');
   if(acct.avatar==='photo'){const p=store.get('ta_photo:'+acct.id,null);if(p)return `<img alt="" src="${p}">`}
   return avatarSVG(acct.avatar);
 }
@@ -808,11 +809,17 @@ function applyWriter(){
 }
 
 /* ================= greeting ================= */
+const GI={
+ sunrise:'<svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><defs><linearGradient id="gi1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#ff9f5a"/></linearGradient></defs><path d="M16 5v4M6.5 9.5l2.6 2.6M25.5 9.5l-2.6 2.6M3 20h4M25 20h4" stroke="#ffd37a" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M8.5 22a7.5 7.5 0 0115 0z" fill="url(#gi1)"/><path d="M5 26h22" stroke="#8fb4ff" stroke-width="2" stroke-linecap="round"/></svg>',
+ sun:'<svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><defs><radialGradient id="gi2" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff1b0"/><stop offset="1" stop-color="#ffb62e"/></radialGradient></defs><g stroke="#ffd04d" stroke-width="2.2" stroke-linecap="round"><path d="M16 3v3M16 26v3M3 16h3M26 16h3M6.8 6.8l2.1 2.1M23.1 23.1l2.1 2.1M25.2 6.8l-2.1 2.1M8.9 23.1l-2.1 2.1"/></g><circle cx="16" cy="16" r="6.5" fill="url(#gi2)"/></svg>',
+ sunset:'<svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><defs><linearGradient id="gi3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb35a"/><stop offset="1" stop-color="#ff6f61"/></linearGradient></defs><path d="M16 7v3M7 11l2.2 2.2M25 11l-2.2 2.2M3 21h3.5M25.5 21H29" stroke="#ffb35a" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M8.5 23a7.5 7.5 0 0115 0z" fill="url(#gi3)"/><path d="M5 27h22M9 24.6h14" stroke="#a98bff" stroke-width="2" stroke-linecap="round"/></svg>',
+ moon:'<svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><defs><linearGradient id="gi4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f7ff"/><stop offset="1" stop-color="#9db8ff"/></linearGradient></defs><path d="M23.5 20.2A10 10 0 0112 5.6a10 10 0 1011.5 14.6z" fill="url(#gi4)"/><path d="M24 5l1 2.4 2.4 1-2.4 1L24 12l-1-2.6-2.4-1 2.4-1z" fill="#ffe08a"/><circle cx="28" cy="15" r="1.1" fill="#ffe08a"/></svg>'
+};
 function greet(){
   const h=new Date().getHours();let t,i;
   if(h>=5&&h<12){t='صبح بخیر';i='sunrise'}else if(h>=12&&h<16){t='بعدازظهر بخیر';i='sun'}else if(h>=16&&h<19){t='عصر بخیر';i='sunset'}else{t='شب بخیر';i='moon'}
   const m=getMe();
-  $('#gText').textContent=m&&m.first?t+'، '+m.first:t;$('#gIcon').innerHTML=ic(P[i],22);
+  $('#gText').textContent=m&&m.first?t+'، '+m.first:t;$('#gIcon').innerHTML=GI[i];
 }
 
 /* ================= stories: swipe hero + grid ================= */
@@ -967,7 +974,7 @@ function renderLogin(body){
   });
 }
 function renderSignup(body){
-  if(!meDraft)meDraft={avatar:'k1',first:'',last:'',photo:null};
+  if(!meDraft)meDraft={avatar:'h2',first:'',last:'',photo:null};
   body.innerHTML=`
     <div class="head"><h1>ساخت حساب</h1><p>یک تصویر، نام، ID و پین چهار رقمی انتخاب کنید تا قصه‌های مورد علاقه‌تان ذخیره شود.</p></div>
     <form class="glass form" id="suForm" autocomplete="off">
