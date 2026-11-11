@@ -208,8 +208,8 @@ html,body{overscroll-behavior-x:none}
 
 #nav{position:fixed;z-index:60;bottom:calc(var(--sb) + 14px);left:50%;transform:translateX(-50%);width:min(400px,calc(100% - 2*var(--gut)));height:64px;border-radius:999px;display:flex;background:rgba(9,17,44,.74);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:transform .35s,opacity .35s}
 #nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--mute);font-size:10.5px;transition:color .2s;position:relative;z-index:4}
-#nav a.on{color:var(--gold)}
-#nav.ring::before{animation:none;background:rgba(247,205,76,.28);padding:1px}
+#nav a.on{color:#e6edff}
+#nav.ring::before{animation-duration:7s}
 #nav a{-webkit-tap-highlight-color:transparent}
 
 .tkh{text-align:center;padding:8px 4px 22px}
