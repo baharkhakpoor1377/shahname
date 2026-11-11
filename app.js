@@ -699,39 +699,66 @@ function applyMe(){$('#meAv').innerHTML=meAvatarHTML();greet()}
 
 /* ================= starry sky ================= */
 (function(){
-  const c=$('#sky'),x=c.getContext('2d');let W=0,H=0;
+  const c=$('#sky'),x=c.getContext('2d');let W=0,H=0,D=1;
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const COLS=['#dfe8ff','#ffffff','#bcd2ff','#fff0b3','#cdb8ff'];
-  const S=[...Array(230)].map(()=>{const big=Math.random()<.07;return{x:Math.random(),y:Math.random(),r:big?Math.random()*.9+1.5:Math.random()*1.1+.3,p:Math.random()*6.28,s:.6+Math.random()*2.4,vx:(Math.random()-.5)*.012,vy:(Math.random()-.4)*.006,b:.5+Math.random()*.5,c:COLS[Math.floor(Math.random()*COLS.length)],sp:big,l:.2+Math.random()*.8}});
-  const SH=[...Array(5)].map((_,i)=>({on:false,wait:3+i*4+Math.random()*6,x:0,y:0,t:0}));
-  function size(){const d=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0)}
+  /* star colours follow real star temperatures: mostly blue-white and white, a few warm */
+  const TEMP=[[[158,186,255],.10],[[190,212,255],.20],[[232,240,255],.26],[[255,255,250],.20],[[255,243,214],.12],[[255,226,176],.08],[[255,204,160],.04]];
+  function tint(){let r=Math.random(),a=0;for(const [c,w] of TEMP){a+=w;if(r<=a)return c}return TEMP[2][0]}
+  const gauss=()=>{let u=0;for(let i=0;i<4;i++)u+=Math.random();return (u-2)/.58};
+  /* a faint Milky Way band running corner to corner */
+  const BAND={x0:-.05,y0:.95,x1:1.05,y1:.05};
+  const N=560,S=[];
+  for(let i=0;i<N;i++){
+    let px,py;
+    if(Math.random()<.42){const u=Math.random(),nx=BAND.x1-BAND.x0,ny=BAND.y1-BAND.y0,len=Math.hypot(nx,ny),o=gauss()*.075;
+      px=BAND.x0+nx*u+(-ny/len)*o;py=BAND.y0+ny*u+(nx/len)*o}
+    else{px=Math.random();py=Math.random()}
+    if(px<0||px>1||py<0||py>1){i--;continue}
+    const m=Math.pow(Math.random(),3.4);          /* a few bright stars, very many faint ones */
+    const b=.14+.86*m;
+    S.push({x:px,y:py,b,r:.32+b*1.15,c:tint(),p:Math.random()*6.28,f1:1.3+Math.random()*3.2,f2:3.5+Math.random()*5,glow:m>.84});
+  }
+  const faint=S.filter(s=>s.b<.5),live=S.filter(s=>s.b>=.5);
+  const L=document.createElement('canvas'),lx=L.getContext('2d');
+  function paintStatic(){
+    L.width=W*D;L.height=H*D;lx.setTransform(D,0,0,D,0,0);lx.clearRect(0,0,W,H);
+    /* soft galactic haze */
+    const m=Math.max(W,H);
+    for(let i=0;i<=16;i++){const k=i/16,cx=(BAND.x0+(BAND.x1-BAND.x0)*k)*W,cy=(BAND.y0+(BAND.y1-BAND.y0)*k)*H;
+      const g=lx.createRadialGradient(cx,cy,0,cx,cy,m*.2);g.addColorStop(0,'rgba(176,190,255,.05)');g.addColorStop(.5,'rgba(150,165,235,.022)');g.addColorStop(1,'rgba(140,155,230,0)');
+      lx.fillStyle=g;lx.fillRect(0,0,W,H)}
+    for(const s of faint){lx.globalAlpha=s.b*(reduce?1:.9);lx.fillStyle=`rgb(${s.c[0]},${s.c[1]},${s.c[2]})`;lx.beginPath();lx.arc(s.x*W,s.y*H,s.r,0,6.283);lx.fill()}
+    lx.globalAlpha=1;
+  }
+  function size(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;x.setTransform(D,0,0,D,0,0);paintStatic()}
   addEventListener('resize',size);size();
+  const SH={on:false,wait:6+Math.random()*8,x:0,y:0,t:0};
+  function drawStar(s,a,sc){
+    const px=s.x*W,py=s.y*H,col=`${s.c[0]},${s.c[1]},${s.c[2]}`;
+    if(s.glow){x.globalAlpha=1;const g=x.createRadialGradient(px,py,0,px,py,s.r*5.5*sc);g.addColorStop(0,`rgba(${col},${.28*a})`);g.addColorStop(1,`rgba(${col},0)`);x.fillStyle=g;x.beginPath();x.arc(px,py,s.r*5.5*sc,0,6.283);x.fill()}
+    x.globalAlpha=Math.min(1,a);x.fillStyle=`rgb(${col})`;x.beginPath();x.arc(px,py,s.r*sc,0,6.283);x.fill();
+  }
   let last=0;
   function frame(ts){
     const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const t=ts/1000;
-    x.clearRect(0,0,W,H);
-    for(const s of S){
-      if(!reduce){s.x+=s.vx*dt;s.y+=s.vy*dt;if(s.x<0)s.x+=1;if(s.x>1)s.x-=1;if(s.y<0)s.y+=1;if(s.y>1)s.y-=1}
-      const tw=.5+.5*Math.sin(t*s.s+s.p),a=s.b*(.12+.88*tw*tw*(.6+.4*Math.sin(t*.7+s.p*3)));
-      const px=s.x*W,py=s.y*H;
-      x.globalAlpha=a;x.fillStyle=s.c;x.beginPath();x.arc(px,py,s.r*(.75+.5*tw),0,6.283);x.fill();
-      if(s.sp){ /* sparkle: soft halo + 4-point cross glint */
-        const L=s.r*(2.5+4.5*tw);x.globalAlpha=a*.35;x.beginPath();x.arc(px,py,s.r*3.2,0,6.283);x.fill();
-        x.globalAlpha=a*.9;x.strokeStyle=s.c;x.lineWidth=.8;x.lineCap='round';x.beginPath();
-        x.moveTo(px-L,py);x.lineTo(px+L,py);x.moveTo(px,py-L);x.lineTo(px,py+L);x.stroke();
-      }
+    x.clearRect(0,0,W,H);x.globalAlpha=1;x.drawImage(L,0,0,W,H);
+    for(const s of live){
+      /* gentle scintillation: small, quick flickers, never fading out completely */
+      const tw=1+(.16+.1*s.b)*(Math.sin(t*s.f1+s.p)*.6+Math.sin(t*s.f2+s.p*2.1)*.4);
+      drawStar(s,s.b*tw,.94+.1*tw);
     }
     x.globalAlpha=1;
-    if(!reduce)for(const m of SH){
-      if(!m.on){m.wait-=dt;if(m.wait<=0){m.on=true;m.t=0;m.x=W*(.25+Math.random()*.7);m.y=Math.random()*H*.35}}
+    if(!reduce){
+      if(!SH.on){SH.wait-=dt;if(SH.wait<=0){SH.on=true;SH.t=0;SH.x=W*(.3+Math.random()*.65);SH.y=Math.random()*H*.4}}
       else{
-        m.t+=dt;const L=.9,k=m.t/L;if(k>=1){m.on=false;m.wait=3.5+Math.random()*7;continue}
-        const px=m.x-k*320,py=m.y+k*190,tx=px+110*(1-k*.3),ty=py-66*(1-k*.3);
-        const g=x.createLinearGradient(px,py,tx,ty);g.addColorStop(0,`rgba(255,255,255,${.9*(1-k)})`);g.addColorStop(1,'rgba(255,255,255,0)');
-        x.strokeStyle=g;x.lineWidth=1.4;x.lineCap='round';x.beginPath();x.moveTo(px,py);x.lineTo(tx,ty);x.stroke();
+        SH.t+=dt;const Ld=.8,k=SH.t/Ld;
+        if(k>=1){SH.on=false;SH.wait=14+Math.random()*18}
+        else{const px=SH.x-k*300,py=SH.y+k*150,tx=px+95*(1-k*.4),ty=py-47*(1-k*.4),fade=Math.sin(k*Math.PI);
+          const g=x.createLinearGradient(px,py,tx,ty);g.addColorStop(0,`rgba(255,255,255,${.85*fade})`);g.addColorStop(1,'rgba(255,255,255,0)');
+          x.strokeStyle=g;x.lineWidth=1.1;x.lineCap='round';x.beginPath();x.moveTo(px,py);x.lineTo(tx,ty);x.stroke()}
       }
     }
-    requestAnimationFrame(frame);
+    if(!reduce)requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 })();
