@@ -946,7 +946,6 @@ function avatarBlock(){
   return `<div class="me-preview ring gold"><span class="ph" id="mePrev">${mePreview()}</span></div>
     <div class="av-grid" id="avGrid">
       ${AVATARS.map(a=>`<button type="button" class="av${meDraft.avatar===a.id?' sel':''}" data-av="${a.id}" aria-label="${a.name}">${avatarSVG(a.id)}</button>`).join('')}
-      <button type="button" class="av up${meDraft.avatar==='photo'?' sel':''}" id="avUp" aria-label="بارگذاری عکس خودم">${ic(P.plus,26)}</button>
     </div>`;
 }
 function namesBlock(){
