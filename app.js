@@ -50,12 +50,12 @@ svg{display:block}
 
 .ring{position:relative}
 .ring::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;z-index:3;
-  background:conic-gradient(from var(--a),rgba(160,185,255,.08) 0,rgba(160,185,255,.12) 45%,rgba(190,210,255,.7) 80%,rgba(160,185,255,.08) 100%);
+  background:conic-gradient(from var(--a),rgba(90,168,255,0) 0%,rgba(90,168,255,0) 48%,#4f9dff 64%,#a98bff 78%,#ff9f5a 90%,rgba(255,159,90,0) 100%);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude;
   animation:spin 7s linear infinite}
 .ring.gold::before{padding:1.5px;
-  background:conic-gradient(from var(--a),rgba(216,154,20,.14) 0,rgba(216,154,20,.22) 38%,#d89a14 60%,#f7cd4c 78%,#fff0b3 90%,#f7cd4c 96%,rgba(216,154,20,.14) 100%);
+  background:conic-gradient(from var(--a),rgba(90,168,255,0) 0%,rgba(90,168,255,0) 48%,#4f9dff 64%,#a98bff 78%,#ff9f5a 90%,rgba(255,159,90,0) 100%);
   animation-duration:4.5s}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;padding:13px 24px;font-weight:600;font-size:15px;transition:transform .15s,opacity .2s}
@@ -448,7 +448,6 @@ const SHELL=`
     </div>
     <div class="sv-info" id="svInfo"></div>
     <a class="sv-add" id="svAdd" href="#studio" hidden>افزودن صدای این قصه</a>
-    <div class="sumcard glass"><h4>خلاصه داستان</h4><p id="svSum"></p></div>
     <div class="sumcard glass" id="svTextCard" hidden><h4>متن قصه</h4><p id="svText" style="white-space:pre-line"></p></div>
   </div>
 </section>
@@ -1442,7 +1441,6 @@ function openStory(id){
   $('#svTitle').textContent=s.title;
   buildWave(s.id);
   $('#svInfo').textContent=lenText(s);
-  $('#svSum').textContent=s.sum;
   $('#svText').textContent=s.text||'';$('#svTextCard').hidden=!(s.text&&s.text.trim());
   $('#story').classList.add('open');$('#story').scrollTop=0;document.body.classList.add('svo');
   svUI();
