@@ -143,7 +143,7 @@ html,body{overscroll-behavior-x:none}
 .bigav .ph{display:block;width:100%;height:100%;border-radius:50%;overflow:hidden;background:#0a1330;box-shadow:0 0 0 6px rgba(255,255,255,.035)}
 .bigav img,.bigav .ph svg{width:100%;height:100%;object-fit:cover}
 .bigav img{object-position:50% 18%}
-.ab h1{font-size:28px;font-weight:800;margin-top:22px;line-height:1.35}
+.ab h1{font-family:'Noto Nastaliq Urdu','Vazirmatn',serif;font-size:30px;font-weight:700;margin-top:18px;line-height:1.9;background:linear-gradient(180deg,#fff7d6,#f7cd4c 55%,#d89a14);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 12px rgba(0,0,0,.45))}
 .role{font-size:13.5px;color:var(--gold);margin:2px 0 26px;letter-spacing:.2px}
 .card{width:100%;padding:26px 24px;text-align:start;margin-bottom:16px}
 .qm{font-family:Georgia,serif;font-size:62px;line-height:.55;color:var(--gold);opacity:.85;height:28px;display:block}
