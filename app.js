@@ -400,7 +400,6 @@ const SHELL=`
         <span class="qm">“</span>
         <p class="bio" id="abBio"></p>
         <i class="sigline"></i>
-        <div class="sig" id="abSig"></div>
       </div>
       <div class="card glass contacts">
         <div class="crow" id="c-mail"><span class="ci" data-ic="mail"></span><span class="cv"></span></div>
@@ -787,7 +786,7 @@ function applyWriter(){
   const w=STATE.writer;
   $('#entName').textContent=w.name;
   $('#abName').textContent=w.name;$('#abRole').textContent=w.role;
-  $('#abBio').textContent=w.bio;$('#abSig').textContent=w.name;
+  $('#abBio').textContent=w.bio;
   [['mail',w.mail],['ig',w.ig],['tg',w.tg],['web',w.web]].forEach(([k,v])=>{
     const el=$('#c-'+k);el.hidden=!v;$('.cv',el).textContent=v||'';
   });
