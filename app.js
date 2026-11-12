@@ -293,8 +293,8 @@ body{overflow-x:clip}
 .tkc{padding:6px 0 0}
 .tkc .card{display:flex;flex-direction:column;gap:10px}
 .tkc a.crow{color:var(--ink);text-decoration:none}
-.tkstack{height:585px}
-.tkstack .tk.fc{height:585px;-webkit-mask:none;mask:none;border-radius:0;background:none;box-shadow:none;perspective:none}
+.tkstack{height:630px}
+.tkstack .tk.fc{height:630px;-webkit-mask:none;mask:none;border-radius:0;background:none;box-shadow:none;perspective:none}
 .fc-in{position:absolute;left:0;right:0;top:0;aspect-ratio:779/1333;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .tk.flip .fc-in{transform:perspective(1100px) rotateY(180deg)}
 .fc-f,.fc-b{position:absolute;inset:0;border-radius:14px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(165deg,#15275f,#0a1233);box-shadow:0 18px 40px rgba(0,0,0,.55),0 0 60px rgba(232,170,80,.08)}
@@ -303,10 +303,10 @@ body{overflow-x:clip}
 .fc-f::after,.fc-b::after{content:"";position:absolute;inset:0;background:var(--frame) center/100% 100% no-repeat;pointer-events:none;z-index:5}
 .fc-f .fc-open{background:linear-gradient(180deg,#1a1c26,#14151c 55%,#101125)}
 .fc-b .fc-open{background:radial-gradient(ellipse at 50% 30%,#2c2160 0%,#17143a 62%,#101125 100%)}
-.fc-ph{position:absolute;left:0;right:0;top:0;height:55%;overflow:hidden}
+.fc-ph{position:absolute;left:0;right:0;top:0;height:68%;overflow:hidden}
 .fc-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 14%;display:block;pointer-events:none;-webkit-user-drag:none;filter:saturate(1.1) contrast(1.06)}
 .fc-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,21,26,.9),rgba(20,21,26,0) 40%)}
-.fc-q{position:absolute;left:0;right:0;top:55%;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0 10px 6px;text-align:center}
+.fc-q{position:absolute;left:0;right:0;top:68%;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0 10px 6px;text-align:center}
 .fc-orn{width:96px;height:11px;flex:none}
 .fc-q h3{font-family:'Noto Nastaliq Urdu','Vazirmatn',serif;font-size:16px;font-weight:700;line-height:2.05;background:linear-gradient(180deg,#fff2c4,#e8c46e 55%,#b8801f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 .fc-bi{position:absolute;left:0;right:0;top:12%;bottom:4%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:0 12px}
@@ -425,25 +425,41 @@ body{overflow-x:clip}
 #grid{cursor:grab}
 #grid.drag{cursor:grabbing;scroll-snap-type:none}
 #grid.drag a{pointer-events:none}
-.hflow{display:none}
+.pnav{display:none}
+.pdots{display:flex;justify-content:center;gap:6px;padding:10px 0 2px}
+.pdots i{width:6px;height:6px;border-radius:50%;background:rgba(200,215,255,.3)}
+.pdots i.on{width:18px;border-radius:4px;background:#e8c46e}
 /* desktop layout: centred hero photo with padding and soft fade all around */
 @media (min-width:900px){
   .wrap{max-width:760px}
   #tab-stories>.wrap{max-width:1120px}
-  /* showcase: centred framed poster, neighbours fanned out on both sides, title below */
-  #pager .slide{position:relative;height:min(86vh,760px);min-height:640px}
-  #pager .cover.hero{position:absolute;left:50%;top:92px;width:min(350px,23vw);height:auto;min-height:0;max-height:none;aspect-ratio:2/3;transform:translateX(-50%);border-radius:18px;z-index:3;box-shadow:0 30px 80px rgba(60,90,255,.35)}
+  /* coverflow showcase: every story, centre one is current; click, arrows, keys, drag or horizontal scroll to change */
+  #pager{--pw:min(350px,23vw);--ph:calc(var(--pw)*1.5);display:block;position:relative;overflow-x:clip;overflow-y:visible;scroll-snap-type:none;height:calc(var(--ph) + 290px);cursor:grab}
+  #pager.drag{cursor:grabbing}
+  html{overflow-x:clip}
+  #pager .slide{position:absolute;left:50%;top:0;width:var(--pw);height:100%;padding:0;flex:none;transform-origin:50% calc(92px + var(--ph)/2);transform:translateX(calc(-50% + var(--x,0px))) perspective(900px) rotateY(var(--r,0deg)) scale(var(--s,1));opacity:var(--o,0);z-index:var(--z,0);pointer-events:none;transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .45s}
+  #pager .slide[data-k="0"]{--x:0px;--r:0deg;--s:1;--o:1;--z:6}
+  #pager .slide[data-k="1"]{--x:calc(var(--pw)*-.97);--r:14deg;--s:.9;--o:.82;--z:5}
+  #pager .slide[data-k="-1"]{--x:calc(var(--pw)*.97);--r:-14deg;--s:.9;--o:.82;--z:5}
+  #pager .slide[data-k="2"]{--x:calc(var(--pw)*-1.72);--r:26deg;--s:.78;--o:.55;--z:4}
+  #pager .slide[data-k="-2"]{--x:calc(var(--pw)*1.72);--r:-26deg;--s:.78;--o:.55;--z:4}
+  #pager .slide[data-k="3"]{--x:calc(var(--pw)*-2.35);--r:34deg;--s:.66;--o:0;--z:3}
+  #pager .slide[data-k="-3"]{--x:calc(var(--pw)*2.35);--r:-34deg;--s:.66;--o:0;--z:3}
+  #pager .slide[data-k="0"] .cover.hero,#pager .slide[data-k="1"] .cover.hero,#pager .slide[data-k="-1"] .cover.hero,#pager .slide[data-k="2"] .cover.hero,#pager .slide[data-k="-2"] .cover.hero{pointer-events:auto}
+  #pager .slide[data-k="0"] .ctt{pointer-events:auto}
+  #pager .cover.hero{position:absolute;left:0;top:92px;width:100%;height:var(--ph);min-height:0;max-height:none;aspect-ratio:auto;border-radius:18px;box-shadow:0 30px 80px rgba(60,90,255,.3);overflow:visible}
   #pager .cover.hero.ring::before{display:block;border-radius:18px}
-  #pager .hero>img,#pager .hero>svg{position:static;transform:none;width:100%;height:100%;object-fit:cover;border-radius:18px;-webkit-mask-image:none;mask-image:none;display:block}
+  #pager .hero>img,#pager .hero>svg{position:static;transform:none;width:100%;height:100%;object-fit:cover;border-radius:18px;-webkit-mask-image:none;mask-image:none;display:block;-webkit-user-drag:none}
   #pager .hero .cgrad{display:none}
-  #pager .hero .ctt{inset-inline:auto;left:50%;right:auto;bottom:auto;top:calc(100% + 18px);transform:translateX(-50%);width:max-content;text-align:center;display:flex;flex-direction:column;align-items:center}
-  #pager .hero .ctt h2{font-size:44px;line-height:1.8;white-space:nowrap}
+  #pager .hero .ctt{inset-inline:auto;left:50%;right:auto;bottom:auto;top:calc(92px + var(--ph) + 18px);transform:translateX(-50%);width:max-content;text-align:center;display:flex;flex-direction:column;align-items:center;opacity:0;pointer-events:none;transition:opacity .35s}
+  #pager .slide[data-k="0"] .ctt{opacity:1}
+  #pager .hero .ctt h2{font-size:44px;line-height:2;white-space:nowrap}
   .hrow{justify-content:center}
   #pager .hmeta{display:none}
-  .hflow{display:block;position:absolute;inset:0;pointer-events:none;z-index:2}
-  .hn{position:absolute;left:50%;top:132px;width:min(250px,17vw);aspect-ratio:2/3;border-radius:14px;overflow:hidden;pointer-events:auto;opacity:var(--o);box-shadow:0 20px 40px rgba(0,0,0,.6);transform:translateX(calc(-50% + var(--x))) perspective(900px) rotateY(var(--r)) scale(var(--s));transition:opacity .25s,transform .25s}
-  .hn:hover{opacity:1}
-  .hn img,.hn svg{width:100%;height:100%;object-fit:cover;display:block}
+  .pnav{display:grid;position:absolute;top:calc(92px + var(--ph)/2 - 22px);z-index:9;width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;color:#e6edff;background:rgba(14,22,58,.7);box-shadow:inset 0 0 0 1px rgba(150,180,255,.3)}
+  .pnav svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .pnav.l{left:max(18px,calc(50% - 600px))}.pnav.r{right:max(18px,calc(50% - 600px))}
+  .pnav[disabled]{opacity:.3;cursor:default}
   #tab-stories .sec{text-align:center;padding-inline:0}
   #grid{padding-inline:max(24px,calc(50vw - 560px));scroll-padding-inline:max(24px,calc(50vw - 560px))}
   #grid .gi{width:214px}
@@ -976,14 +992,16 @@ const newestFirst=()=>[...STORIES].sort((a,b)=>b.id-a.id);
 function renderPager(){
   const all=[...STORIES],hero=all.reduce((m,s)=>!m||(s.at||0)>(m.at||0)||((s.at||0)===(m.at||0)&&s.id>m.id)?s:m,null);
   const top=hero?[hero]:[],rest=all.filter(s=>s!==hero).sort((a,b)=>a.id-b.id);
-  pager.innerHTML=top.map(s=>`<article class="slide">
-    <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
-      <div class="ctt"><div class="hnow">قصه‌ی امشب</div><h2>${esc(s.title)}</h2><i class="gline"></i><div class="hrow"><span class="hplay ring gold"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="#1a1203"/></svg></span><div class="len">${lenText(s)}</div></div></div></a>
-    <div class="hmeta"><div class="lbl">${label(s.id)}</div></div>${(()=>{const n=rest.slice().reverse().slice(0,4),P=[[-1,-330,.9,.8,14],[1,330,.9,.8,-14],[-2,-560,.78,.55,26],[2,560,.78,.55,-26]];return '<div class="hflow">'+n.map((t,k)=>`<a class="hn" href="#story-${t.id}" aria-label="${esc(t.title)}" style="--x:${P[k][1]}px;--s:${P[k][2]};--o:${P[k][3]};--r:${P[k][4]}deg">${coverHTML(t)}</a>`).join('')+'</div>'})()}</article>`).join('');
+  const seq=hero?[hero,...rest.slice().sort((a,b)=>b.id-a.id)]:[];
+  pager.innerHTML=seq.map((s,n)=>`<article class="slide" data-i="${n}">
+    <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}" draggable="false">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
+      <div class="ctt"><div class="hnow">${n?'':'قصه‌ی امشب'}</div><h2>${esc(s.title)}</h2><i class="gline"></i><div class="hrow"><span class="hplay ring gold"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="#1a1203"/></svg></span><div class="len">${lenText(s)}</div></div></div></a>
+    <div class="hmeta"><div class="lbl">${label(s.id)}</div>${seq.length>1?'<div class="pdots">'+seq.map((_,m)=>`<i class="${m===n?'on':''}"></i>`).join('')+'</div>':''}</div></article>`).join('')
+    +(seq.length>1?'<button class="pnav l" type="button" aria-label="بعدی"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><button class="pnav r" type="button" aria-label="قبلی"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>':'');
   $('#grid').innerHTML=rest.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<i class="cgrad"></i><span class="num">${fa(s.id)}</span>${(t=>t?`<span class="chip">${t}</span>`:'')(lenText(s).replace('قصه کوتاه','').replace('·','').trim())}<div class="gt">${esc(s.title)}</div></div>
     <div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></a>`).join('');
   idx=0;const sec=$('#grid').previousElementSibling;if(sec&&sec.classList.contains('sec'))sec.hidden=!rest.length;
-  pager.scrollTo({left:0,behavior:'instant'});initGridNav();
+  pager.scrollTo({left:0,behavior:'instant'});initGridNav();setCur(0);
 }
 
 /* story row: arrow buttons + mouse drag */
@@ -999,6 +1017,23 @@ function initGridNav(){
   addEventListener('pointerup',()=>{if(!on)return;on=false;if(moved)setTimeout(()=>g.classList.remove('drag'),0)});
   g.addEventListener('dragstart',e=>e.preventDefault());
 }
+
+/* hero carousel: swipe on phones (scroll-snap), coverflow on desktop */
+let pcur=0;const DESK=matchMedia('(min-width:900px)');
+function setCur(i){const sl=[...pager.querySelectorAll('.slide')];if(!sl.length)return;pcur=Math.max(0,Math.min(sl.length-1,i));
+  sl.forEach((el,j)=>{el.dataset.k=Math.max(-3,Math.min(3,j-pcur))});
+  const l=pager.querySelector('.pnav.l'),r=pager.querySelector('.pnav.r');if(l)l.disabled=pcur>=sl.length-1;if(r)r.disabled=pcur<=0}
+pager.addEventListener('click',e=>{if(!DESK.matches)return;
+  if(pager.dataset.moved){e.preventDefault();return}
+  const nb=e.target.closest('.pnav');if(nb){setCur(pcur+(nb.classList.contains('l')?1:-1));return}
+  const sl=e.target.closest('.slide');if(sl&&+sl.dataset.k!==0){e.preventDefault();setCur(+sl.dataset.i)}});
+addEventListener('keydown',e=>{if(!DESK.matches||!$('#tab-stories').classList.contains('on'))return;if(/INPUT|TEXTAREA/.test((e.target||{}).tagName))return;
+  if(e.key==='ArrowLeft')setCur(pcur+1);else if(e.key==='ArrowRight')setCur(pcur-1)});
+let wT=0;pager.addEventListener('wheel',e=>{if(!DESK.matches)return;if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&Math.abs(e.deltaX)>6){e.preventDefault();const t=Date.now();if(t-wT>380){wT=t;setCur(pcur+(e.deltaX>0?-1:1))}}},{passive:false});
+{let sx=0,on=false,mv=false;
+ pager.addEventListener('pointerdown',e=>{if(!DESK.matches||e.pointerType!=='mouse'||e.button!==0||e.target.closest('.pnav'))return;on=true;mv=false;sx=e.clientX;delete pager.dataset.moved});
+ addEventListener('pointermove',e=>{if(!on)return;const dx=e.clientX-sx;if(!mv&&Math.abs(dx)>8){mv=true;pager.classList.add('drag')}if(mv&&Math.abs(dx)>70){setCur(pcur+(dx>0?1:-1));sx=e.clientX}});
+ addEventListener('pointerup',()=>{if(!on)return;on=false;pager.classList.remove('drag');if(mv){pager.dataset.moved=1;setTimeout(()=>delete pager.dataset.moved,60)}})}
 pager.addEventListener('scroll',()=>{const i=Math.round(Math.abs(pager.scrollLeft)/pager.clientWidth);if(i>=0&&i<STORIES.length)idx=i},{passive:true});
 addEventListener('resize',()=>{if($('#tab-stories').classList.contains('on'))pager.scrollTo({left:rtl()*idx*pager.clientWidth,behavior:'instant'})});
 
@@ -1695,7 +1730,8 @@ function ticketData(){
     C.push({_s:s.id,q:c.q,a:c.a,e:c.e||'',img:im&&!/^\/|^https?:|^data:/.test(im)?encodeURI(im):im})}}));
   return C;
 }
-const TK_N=7; /* the deck always holds 7 cards, mixed across the stories; every visit brings the next 7 */
+const TK_N=5; /* the deck always holds 5 cards with different pictures, mixed across the stories; every visit brings the next ones */
+let TK_USED=0;
 let TK_NEXT=null;
 function tkDeck(){
   const all=ticketData();if(all.length<=TK_N)return all;
@@ -1704,10 +1740,12 @@ function tkDeck(){
   newestFirst().forEach(s=>{const cs=all.filter(c=>c._s===s.id);if(cs.length)groups.push(cs)});
   const mix=[];for(let r=0;mix.length<all.length;r++){let any=false;groups.forEach(gr=>{if(gr[r]){mix.push(gr[r]);any=true}});if(!any)break}
   let off=+store.get('ta_tkoff',0)||0;if(off>=mix.length||off<0)off=0;
-  const deck=[];for(let i=0;i<TK_N;i++)deck.push(mix[(off+i)%mix.length]);
-  return deck;
+  const deck=[],seen=new Set();let steps=0;
+  for(let i=0;i<mix.length&&deck.length<TK_N;i++){const c=mix[(off+i)%mix.length],k=c.img||('#'+i);steps=i+1;if(seen.has(k))continue;seen.add(k);deck.push(c)}
+  for(let i=0;deck.length<TK_N&&i<mix.length;i++){const c=mix[(off+i)%mix.length];if(!deck.includes(c))deck.push(c)}
+  TK_USED=steps;return deck;
 }
-function tkAdvance(){try{const n=ticketData().length;store.set('ta_tkoff',((+store.get('ta_tkoff',0)||0)+TK_N)%Math.max(1,n))}catch(e){}}
+function tkAdvance(){try{const n=ticketData().length;store.set('ta_tkoff',((+store.get('ta_tkoff',0)||0)+(TK_USED||TK_N))%Math.max(1,n))}catch(e){}}
 function warmTickets(){
   try{TK_NEXT=tkDeck();const pics=[...new Set(TK_NEXT.slice(0,4).map(c=>c.img).filter(Boolean))];window.__tkWarm=pics.map(u=>{const i=new Image();i.decoding='async';i.src=u;return i.decode?i.decode().catch(()=>{}):0})}catch(e){}
 }
