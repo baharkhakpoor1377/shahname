@@ -118,7 +118,10 @@ html,body{overscroll-behavior-x:none}
 body{overflow-x:clip}
 #tab-stories .wrap{position:relative}
 #tab-stories .top{position:absolute;z-index:6;top:calc(var(--st) + 20px);inset-inline:0;margin:0}
-#tab-stories .hello,#tab-stories .sub{text-shadow:0 2px 12px rgba(0,0,0,.7)}
+#tab-stories .hello,#tab-stories .sub{text-shadow:0 1px 3px rgba(0,0,0,.95),0 2px 14px rgba(0,0,0,.9)}
+#tab-stories .hello{font-weight:700}
+#tab-stories .top .avatar{box-shadow:0 0 0 4px rgba(5,10,31,.5),0 4px 18px rgba(0,0,0,.7);border-radius:50%}
+@media (max-width:899px){#tab-stories .wrap::before{content:"";position:absolute;top:0;left:50%;width:100vw;transform:translateX(-50%);height:calc(var(--st) + 150px);background:linear-gradient(180deg,rgba(5,10,31,.88) 0,rgba(5,10,31,.62) 45%,rgba(5,10,31,0) 100%);z-index:5;pointer-events:none}}
 #tab-stories .sub{color:#c3cdea}
 #pager{width:100vw;margin-inline:calc(50% - 50vw)}
 #pager .slide{padding-inline:0}
