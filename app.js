@@ -413,20 +413,25 @@ body{overflow-x:clip}
 @keyframes entglow{from{opacity:.55;transform:translate(-50%,-50%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
 #ent::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,#050a1c 3%,rgba(5,10,28,.85) 22%,rgba(5,10,28,.2) 42%,rgba(5,10,28,0) 60%);pointer-events:none}
 
+.hflow{display:none}
 /* desktop layout: centred hero photo with padding and soft fade all around */
 @media (min-width:900px){
   .wrap{max-width:760px}
   #tab-stories>.wrap{max-width:1120px}
-  #pager .cover.hero{height:min(76vh,780px);min-height:480px}
-  #pager .cover.hero.ring::before{display:block;content:"";position:absolute;inset:-6% 0 0;border:0;border-radius:0;background:var(--bg,none) center 25%/cover;filter:blur(48px) brightness(.5) saturate(1.25);-webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);animation:none;z-index:0}
-  #pager .hero>img,#pager .hero>svg{position:absolute;z-index:1;top:76px;left:50%;transform:translateX(-50%);height:calc(100% - 76px);width:auto;max-width:92%;object-fit:contain;
-    -webkit-mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 10%,#000 52%,transparent 100%);-webkit-mask-composite:source-in;
-    mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 10%,#000 52%,transparent 100%);mask-composite:intersect}
-  #pager .hero .cgrad{z-index:2}
-  #pager .hero .ctt{inset-inline:0;bottom:30px;text-align:center;display:flex;flex-direction:column;align-items:center}
-  #pager .hero .ctt h2{font-size:46px}
+  /* showcase: centred framed poster, neighbours fanned out on both sides, title below */
+  #pager .slide{position:relative;height:min(86vh,760px);min-height:640px}
+  #pager .cover.hero{position:absolute;left:50%;top:92px;width:min(350px,23vw);height:auto;min-height:0;max-height:none;aspect-ratio:2/3;transform:translateX(-50%);border-radius:18px;z-index:3;box-shadow:0 30px 80px rgba(60,90,255,.35)}
+  #pager .cover.hero.ring::before{display:block;border-radius:18px}
+  #pager .hero>img,#pager .hero>svg{position:static;transform:none;width:100%;height:100%;object-fit:cover;border-radius:18px;-webkit-mask-image:none;mask-image:none;display:block}
+  #pager .hero .cgrad{display:none}
+  #pager .hero .ctt{inset-inline:auto;left:50%;right:auto;bottom:auto;top:calc(100% + 18px);transform:translateX(-50%);width:max-content;text-align:center;display:flex;flex-direction:column;align-items:center}
+  #pager .hero .ctt h2{font-size:44px;line-height:1.8;white-space:nowrap}
   .hrow{justify-content:center}
-  #pager .hmeta{text-align:center}
+  #pager .hmeta{display:none}
+  .hflow{display:block;position:absolute;inset:0;pointer-events:none;z-index:2}
+  .hn{position:absolute;left:50%;top:132px;width:min(250px,17vw);aspect-ratio:2/3;border-radius:14px;overflow:hidden;pointer-events:auto;opacity:var(--o);box-shadow:0 20px 40px rgba(0,0,0,.6);transform:translateX(calc(-50% + var(--x))) perspective(900px) rotateY(var(--r)) scale(var(--s));transition:opacity .25s,transform .25s}
+  .hn:hover{opacity:1}
+  .hn img,.hn svg{width:100%;height:100%;object-fit:cover;display:block}
   #tab-stories .sec{text-align:center;padding-inline:0}
   #grid{padding-inline:max(24px,calc(50vw - 560px));scroll-padding-inline:max(24px,calc(50vw - 560px))}
   #grid .gi{width:214px}
@@ -962,7 +967,7 @@ function renderPager(){
   pager.innerHTML=top.map(s=>`<article class="slide">
     <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
       <div class="ctt"><div class="hnow">قصه‌ی امشب</div><h2>${esc(s.title)}</h2><i class="gline"></i><div class="hrow"><span class="hplay ring gold"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="#1a1203"/></svg></span><div class="len">${lenText(s)}</div></div></div></a>
-    <div class="hmeta"><div class="lbl">${label(s.id)}</div></div></article>`).join('');
+    <div class="hmeta"><div class="lbl">${label(s.id)}</div></div>${(()=>{const n=rest.slice().reverse().slice(0,4),P=[[-1,-330,.9,.8,14],[1,330,.9,.8,-14],[-2,-560,.78,.55,26],[2,560,.78,.55,-26]];return '<div class="hflow">'+n.map((t,k)=>`<a class="hn" href="#story-${t.id}" aria-label="${esc(t.title)}" style="--x:${P[k][1]}px;--s:${P[k][2]};--o:${P[k][3]};--r:${P[k][4]}deg">${coverHTML(t)}</a>`).join('')+'</div>'})()}</article>`).join('');
   $('#grid').innerHTML=rest.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<i class="cgrad"></i><span class="num">${fa(s.id)}</span>${(t=>t?`<span class="chip">${t}</span>`:'')(lenText(s).replace('قصه کوتاه','').replace('·','').trim())}<div class="gt">${esc(s.title)}</div></div>
     <div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></a>`).join('');
   idx=0;const sec=$('#grid').previousElementSibling;if(sec&&sec.classList.contains('sec'))sec.hidden=!rest.length;
