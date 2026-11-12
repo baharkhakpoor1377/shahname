@@ -416,7 +416,7 @@ body{overflow-x:clip}
 #ent .bg .blur{display:none}
 @media (min-width:900px) and (min-aspect-ratio:1/1){
   #ent .bg .blur{display:block;position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;filter:blur(46px) brightness(.55) saturate(1.2)}
-  #ent .bg img:not(.blur),#ent .bg video{object-fit:contain;object-position:50% 50%;left:50%;right:auto;width:auto;max-width:100%;aspect-ratio:464/832;transform:translateX(-50%)}
+  #ent .bg img:not(.blur),#ent .bg video{object-fit:contain;object-position:50% 50%;left:50%;right:auto;width:auto;max-width:100%;aspect-ratio:9/16;transform:translateX(-50%)}
   #ent .bg video{height:100%}
   #ent::after{background:linear-gradient(to top,#050a1c 2%,rgba(5,10,28,.75) 16%,rgba(5,10,28,0) 40%),linear-gradient(to right,rgba(5,10,28,.55),transparent 28%,transparent 72%,rgba(5,10,28,.55))}
 }
