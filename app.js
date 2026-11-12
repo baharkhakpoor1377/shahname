@@ -992,15 +992,15 @@ const newestFirst=()=>[...STORIES].sort((a,b)=>b.id-a.id);
 function renderPager(){
   const all=[...STORIES],hero=all.reduce((m,s)=>!m||(s.at||0)>(m.at||0)||((s.at||0)===(m.at||0)&&s.id>m.id)?s:m,null);
   const top=hero?[hero]:[],rest=all.filter(s=>s!==hero).sort((a,b)=>a.id-b.id);
-  const seq=hero?[hero,...rest.slice().sort((a,b)=>b.id-a.id)]:[];
+  const seq=(hero?[hero,...rest.slice().sort((a,b)=>b.id-a.id)]:[]).slice(0,5),older=all.filter(s=>!seq.includes(s)).sort((a,b)=>a.id-b.id);
   pager.innerHTML=seq.map((s,n)=>`<article class="slide" data-i="${n}">
     <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}" draggable="false">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
       <div class="ctt"><div class="hnow">${n?'':'قصه‌ی امشب'}</div><h2>${esc(s.title)}</h2><i class="gline"></i><div class="hrow"><span class="hplay ring gold"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="#1a1203"/></svg></span><div class="len">${lenText(s)}</div></div></div></a>
     <div class="hmeta"><div class="lbl">${label(s.id)}</div>${seq.length>1?'<div class="pdots">'+seq.map((_,m)=>`<i class="${m===n?'on':''}"></i>`).join('')+'</div>':''}</div></article>`).join('')
     +(seq.length>1?'<button class="pnav l" type="button" aria-label="بعدی"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><button class="pnav r" type="button" aria-label="قبلی"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>':'');
-  $('#grid').innerHTML=rest.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<i class="cgrad"></i><span class="num">${fa(s.id)}</span>${(t=>t?`<span class="chip">${t}</span>`:'')(lenText(s).replace('قصه کوتاه','').replace('·','').trim())}<div class="gt">${esc(s.title)}</div></div>
+  $('#grid').innerHTML=older.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<i class="cgrad"></i><span class="num">${fa(s.id)}</span>${(t=>t?`<span class="chip">${t}</span>`:'')(lenText(s).replace('قصه کوتاه','').replace('·','').trim())}<div class="gt">${esc(s.title)}</div></div>
     <div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></a>`).join('');
-  idx=0;const sec=$('#grid').previousElementSibling;if(sec&&sec.classList.contains('sec'))sec.hidden=!rest.length;
+  idx=0;const sec=$('#grid').previousElementSibling;if(sec&&sec.classList.contains('sec'))sec.hidden=!older.length;
   pager.scrollTo({left:0,behavior:'instant'});initGridNav();setCur(0);
 }
 
