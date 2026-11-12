@@ -412,6 +412,37 @@ body{overflow-x:clip}
 @keyframes entglow{from{opacity:.55;transform:translate(-50%,-50%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
 #ent::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,#050a1c 3%,rgba(5,10,28,.85) 22%,rgba(5,10,28,.2) 42%,rgba(5,10,28,0) 60%);pointer-events:none}
 
+/* desktop layout: centred hero photo with padding and soft fade all around */
+@media (min-width:900px){
+  .wrap{max-width:760px}
+  #tab-stories>.wrap{max-width:1120px}
+  #pager .cover.hero{height:min(76vh,780px);min-height:480px}
+  #pager .cover.hero.ring::before{display:block;content:"";position:absolute;inset:-6% 0 0;border:0;border-radius:0;background:var(--bg,none) center 25%/cover;filter:blur(48px) brightness(.5) saturate(1.25);-webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);animation:none;z-index:0}
+  #pager .hero>img,#pager .hero>svg{position:absolute;z-index:1;top:76px;left:50%;transform:translateX(-50%);height:calc(100% - 76px);width:auto;max-width:92%;object-fit:contain;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 10%,#000 52%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 10%,#000 52%,transparent 100%);mask-composite:intersect}
+  #pager .hero .cgrad{z-index:2}
+  #pager .hero .ctt{inset-inline:0;bottom:30px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  #pager .hero .ctt h2{font-size:46px}
+  .hrow{justify-content:center}
+  #pager .hmeta{text-align:center}
+  #tab-stories .sec{text-align:center;padding-inline:0}
+  #grid{padding-inline:max(24px,calc(50vw - 560px));scroll-padding-inline:max(24px,calc(50vw - 560px))}
+  #grid .gi{width:214px}
+  /* story page */
+  .svw{max-width:700px}
+  .sv-cover{width:100vw;margin-inline:calc(50% - 50vw);height:min(66vh,700px);min-height:440px;max-height:none;position:relative}
+  .sv-cover.ring::before{display:block;content:"";position:absolute;inset:-6% 0 0;border:0;border-radius:0;background:var(--bg,none) center 25%/cover;filter:blur(48px) brightness(.5) saturate(1.25);-webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);animation:none;z-index:0}
+  .sv-cover #svArt{z-index:1}
+  .sv-cover #svArt>img,.sv-cover #svArt>svg{position:absolute;top:70px;left:50%;transform:translateX(-50%);height:calc(100% - 70px);width:auto;max-width:92%;object-fit:contain;
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 10%,#000 60%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent,#000 16%,#000 84%,transparent),linear-gradient(to bottom,transparent,#000 10%,#000 60%,transparent 100%);mask-composite:intersect}
+  .sv-cover .cgrad{z-index:2}
+  .sv-cover .ctt{inset-inline:0}
+  .sv-fav{inset-inline-start:max(14px,calc(50vw - 350px))}
+  .sv-close{inset-inline-end:max(14px,calc(50vw - 350px))}
+}
+
 /* desktop entrance: full-height HD video, whole figure visible, blurred sides */
 #ent .bg .blur{display:none}
 @media (min-width:900px) and (min-aspect-ratio:1/1){
@@ -1792,6 +1823,9 @@ addEventListener('hashchange',route);
   requestAnimationFrame(frame);
 })();
 
+/* desktop: blurred backdrop for hero/story covers */
+(function(){const fix=()=>document.querySelectorAll('.cover.hero:not([data-bg]),.sv-cover').forEach(el=>{const i=el.querySelector('img');if(i&&i.getAttribute('src')){if(el.dataset.bg===i.getAttribute('src'))return;el.dataset.bg=i.getAttribute('src');el.style.setProperty('--bg','url("'+i.getAttribute('src')+'")')}});
+new MutationObserver(fix).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src']});fix()})();
 /* ================= entrance ================= */
 const ent=$('#ent');
 let entered=false;try{entered=sessionStorage.getItem('ta_in')==='1'}catch(e){}
