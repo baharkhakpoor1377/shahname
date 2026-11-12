@@ -415,6 +415,16 @@ body{overflow-x:clip}
 @keyframes entglow{from{opacity:.55;transform:translate(-50%,-50%) scale(.94)}to{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
 #ent::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to top,#050a1c 3%,rgba(5,10,28,.85) 22%,rgba(5,10,28,.2) 42%,rgba(5,10,28,0) 60%);pointer-events:none}
 
+/* fix: hero pager swallowed the first wheel scrolls; arrows + drag for the story row */
+#pager{overflow-y:hidden}
+#tab-stories .sec{position:relative}
+.gnav{position:absolute;left:0;right:auto;top:50%;transform:translateY(-50%);display:flex;gap:8px;direction:ltr}
+.gnav button{width:34px;height:34px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;color:#e6edff;background:rgba(14,22,58,.7);box-shadow:inset 0 0 0 1px rgba(150,180,255,.3);-webkit-tap-highlight-color:transparent}
+.gnav button:active{transform:scale(.94)}
+.gnav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#grid{cursor:grab}
+#grid.drag{cursor:grabbing;scroll-snap-type:none}
+#grid.drag a{pointer-events:none}
 .hflow{display:none}
 /* desktop layout: centred hero photo with padding and soft fade all around */
 @media (min-width:900px){
@@ -973,7 +983,21 @@ function renderPager(){
   $('#grid').innerHTML=rest.map(s=>`<a class="gi" href="#story-${s.id}"><div class="cover ring">${coverHTML(s)}<i class="cgrad"></i><span class="num">${fa(s.id)}</span>${(t=>t?`<span class="chip">${t}</span>`:'')(lenText(s).replace('قصه کوتاه','').replace('·','').trim())}<div class="gt">${esc(s.title)}</div></div>
     <div class="bar"><b style="width:${barW(s.id)}%"></b></div><div class="lbl">${label(s.id)}</div></a>`).join('');
   idx=0;const sec=$('#grid').previousElementSibling;if(sec&&sec.classList.contains('sec'))sec.hidden=!rest.length;
-  pager.scrollTo({left:0,behavior:'instant'});
+  pager.scrollTo({left:0,behavior:'instant'});initGridNav();
+}
+
+/* story row: arrow buttons + mouse drag */
+function initGridNav(){
+  const g=$('#grid'),sec=g&&g.previousElementSibling;if(!sec||!sec.classList.contains('sec')||sec.querySelector('.gnav'))return;
+  const nav=document.createElement('div');nav.className='gnav';
+  nav.innerHTML='<button type="button" aria-label="قبلی" data-d="1"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button type="button" aria-label="بعدی" data-d="-1"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>';
+  sec.appendChild(nav);
+  nav.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const w=(g.querySelector('.gi')||{offsetWidth:200}).offsetWidth+14;g.scrollBy({left:(+b.dataset.d)*w*3,behavior:'smooth'})});
+  let sx=0,sl=0,on=false,moved=false;
+  g.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;on=true;moved=false;sx=e.clientX;sl=g.scrollLeft});
+  addEventListener('pointermove',e=>{if(!on)return;const dx=e.clientX-sx;if(!moved&&Math.abs(dx)>5){moved=true;g.classList.add('drag')}if(moved)g.scrollLeft=sl-dx});
+  addEventListener('pointerup',()=>{if(!on)return;on=false;if(moved)setTimeout(()=>g.classList.remove('drag'),0)});
+  g.addEventListener('dragstart',e=>e.preventDefault());
 }
 pager.addEventListener('scroll',()=>{const i=Math.round(Math.abs(pager.scrollLeft)/pager.clientWidth);if(i>=0&&i<STORIES.length)idx=i},{passive:true});
 addEventListener('resize',()=>{if($('#tab-stories').classList.contains('on'))pager.scrollTo({left:rtl()*idx*pager.clientWidth,behavior:'instant'})});
