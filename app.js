@@ -889,14 +889,14 @@ function applyWriter(){
   const url=(w.photo?(/^data:/.test(w.photo)?w.photo:'/_blob/'+w.photo):null);
   const ab=$('#abPhoto'),eb=$('#entBg');
   ab.innerHTML=url?`<img alt="" src="${url}">`:avatarPH;
-  eb.innerHTML=`<img class="blur" alt="" src="${ENT_IMG}"><img alt="" src="${ENT_IMG}"><video muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" style="opacity:0;transition:opacity .8s"></video>`;
+  eb.innerHTML=`<img class="blur" alt="" src="${ENT_IMG}"><img alt="" src="${ENT_IMG}"><video muted playsinline webkit-playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" style="opacity:0;transition:opacity .8s"></video>`;
   {const v=$('video',eb);if(v&&$('#ent').hidden)v.remove();else if(v){
     v.muted=true;v.setAttribute('muted','');
     v.addEventListener('playing',()=>{v.style.opacity=1;const sk=$('#entSky');if(sk)sk.style.display='none'},{once:true});
     const HD=matchMedia('(min-width:900px) and (min-aspect-ratio:1/1)').matches;
     v.addEventListener('error',()=>{if(HD&&!v.dataset.fb){v.dataset.fb=1;v.src='entrance.mp4';v.play().catch(()=>{})}else v.remove()});
     v.src=HD?'entrance-hd.mp4':'entrance.mp4';const p=v.play();if(p&&p.catch)p.catch(()=>{});
-    const kick=()=>{if(v.paused)v.play().catch(()=>{})};
+    const kick=()=>{if(v.paused&&!v.ended)v.play().catch(()=>{})};
     document.addEventListener('touchstart',kick,{once:true,passive:true});document.addEventListener('click',kick,{once:true});
   }}
   if(url){
