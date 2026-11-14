@@ -995,7 +995,7 @@ const newestFirst=()=>[...STORIES].sort((a,b)=>b.id-a.id);
 function renderPager(){
   const all=[...STORIES],hero=all.reduce((m,s)=>!m||(s.at||0)>(m.at||0)||((s.at||0)===(m.at||0)&&s.id>m.id)?s:m,null);
   const top=hero?[hero]:[],rest=all.filter(s=>s!==hero).sort((a,b)=>a.id-b.id);
-  const seq=(hero?[hero,...rest.slice().sort((a,b)=>b.id-a.id)]:[]).slice(0,5),older=all.filter(s=>!seq.includes(s)).sort((a,b)=>a.id-b.id);
+  const seq=(hero?[hero,...rest.slice().sort((a,b)=>b.id-a.id)]:[]).slice(0,matchMedia('(min-width:900px)').matches?5:3),older=all.filter(s=>!seq.includes(s)).sort((a,b)=>a.id-b.id);
   pager.innerHTML=seq.map((s,n)=>`<article class="slide" data-i="${n}">
     <a class="cover hero ring" href="#story-${s.id}" aria-label="${esc(s.title)}" draggable="false">${coverHTML(s)}<span class="num">${fa(s.id)}</span><i class="cgrad"></i>
       <div class="ctt"><div class="hnow">${n?'':'قصه‌ی امشب'}</div><h2>${esc(s.title)}</h2><i class="gline"></i><div class="hrow"><span class="hplay ring gold"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="#1a1203"/></svg></span><div class="len">${lenText(s)}</div></div></div></a>
@@ -1022,7 +1022,7 @@ function initGridNav(){
 }
 
 /* hero carousel: swipe on phones (scroll-snap), coverflow on desktop */
-let pcur=0;const DESK=matchMedia('(min-width:900px)');
+let pcur=0;const DESK=matchMedia('(min-width:900px)');DESK.addEventListener&&DESK.addEventListener('change',()=>{try{renderPager()}catch(e){}});
 function setCur(i){const sl=[...pager.querySelectorAll('.slide')];if(!sl.length)return;pcur=Math.max(0,Math.min(sl.length-1,i));
   sl.forEach((el,j)=>{el.dataset.k=Math.max(-3,Math.min(3,j-pcur))});
   const l=pager.querySelector('.pnav.l'),r=pager.querySelector('.pnav.r');if(l)l.disabled=pcur>=sl.length-1;if(r)r.disabled=pcur<=0}
